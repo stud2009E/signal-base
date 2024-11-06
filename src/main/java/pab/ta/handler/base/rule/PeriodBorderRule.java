@@ -28,18 +28,19 @@ public class PeriodBorderRule extends AbstractRule {
     @Override
     public boolean isSatisfied(int index, TradingRecord tradingRecord) {
 
-        return rules.stream().allMatch(rule -> {
-            boolean isSatisfied = false;
+        return rules
+                .parallelStream()
+                .allMatch(rule -> {
+                    boolean isSatisfied = false;
 
-            for (int i = index; i + barLength > index && i > 0; i--) {
-                if (rule.isSatisfied(i)) {
-                    isSatisfied = true;
-                    break;
-                }
-            }
+                    for (int i = index; i + barLength > index && i > 0; i--) {
+                        if (rule.isSatisfied(i)) {
+                            isSatisfied = true;
+                            break;
+                        }
+                    }
 
-            return isSatisfied;
-        });
-
+                    return isSatisfied;
+                });
     }
 }

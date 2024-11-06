@@ -1,32 +1,32 @@
 package pab.ta.handler.base.rule;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.ta4j.core.BarSeries;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.ta4j.core.BaseBarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.Rule;
 import org.ta4j.core.indicators.helpers.FixedDecimalIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedUpIndicatorRule;
-import pab.ta.handler.base.rule.RepeatRule;
 
-@ExtendWith(MockitoExtension.class)
-public class RepeatRuleTest {
+import java.util.stream.Stream;
 
-    private BarSeries series;
+class RepeatRuleTest {
 
-    @BeforeEach
-    public void setUp(){
-        series = new BaseBarSeries();
+    private static Indicator<Num> evaluatedIndicator;
+
+    @BeforeAll
+    static void initAll() {
+        evaluatedIndicator = new FixedDecimalIndicator(
+                new BaseBarSeries(),
+                100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
     }
 
     @Test
-    public void newRepeatRuleTest(){
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
+    @DisplayName("Test for checking repeat rule args")
+    void newRepeatRuleTest() {
         Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> new RepeatRule(crossUpRule, 0, 10));
@@ -40,69 +40,65 @@ public class RepeatRuleTest {
 
     }
 
-    @Test
-    public void repeat2RuleTest() {
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
 
-        Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
-        Assertions.assertFalse(crossUpRule.isSatisfied(0));
-        Assertions.assertFalse(crossUpRule.isSatisfied(1));
-        Assertions.assertFalse(crossUpRule.isSatisfied(2));
-        Assertions.assertTrue(crossUpRule.isSatisfied(3));
-        Assertions.assertFalse(crossUpRule.isSatisfied(4));
-        Assertions.assertFalse(crossUpRule.isSatisfied(5));
-        Assertions.assertFalse(crossUpRule.isSatisfied(6));
-        Assertions.assertTrue(crossUpRule.isSatisfied(7));
-        Assertions.assertFalse(crossUpRule.isSatisfied(8));
-        Assertions.assertFalse(crossUpRule.isSatisfied(9));
-        Assertions.assertFalse(crossUpRule.isSatisfied(10));
-        Assertions.assertTrue(crossUpRule.isSatisfied(11));
-
-        Rule repeatRule = new RepeatRule(crossUpRule, 2, 10);
-        Assertions.assertFalse(repeatRule.isSatisfied(0));
-        Assertions.assertFalse(repeatRule.isSatisfied(1));
-        Assertions.assertFalse(repeatRule.isSatisfied(2));
-        Assertions.assertFalse(repeatRule.isSatisfied(3));
-        Assertions.assertFalse(repeatRule.isSatisfied(4));
-        Assertions.assertFalse(repeatRule.isSatisfied(5));
-        Assertions.assertFalse(repeatRule.isSatisfied(6));
-        Assertions.assertTrue(repeatRule.isSatisfied(7));
-        Assertions.assertFalse(repeatRule.isSatisfied(8));
-        Assertions.assertFalse(repeatRule.isSatisfied(9));
-        Assertions.assertFalse(repeatRule.isSatisfied(10));
-        Assertions.assertTrue(repeatRule.isSatisfied(11));
+    private static Stream<Arguments> repeat2RuleTest() {
+        return Stream.of(
+                Arguments.of(0, false, false),
+                Arguments.of(1, false, false),
+                Arguments.of(2, false, false),
+                Arguments.of(3, true, false),
+                Arguments.of(4, false, false),
+                Arguments.of(5, false, false),
+                Arguments.of(6, false, false),
+                Arguments.of(7, true, true),
+                Arguments.of(8, false, false),
+                Arguments.of(9, false, false),
+                Arguments.of(10, false, false),
+                Arguments.of(11, true, true)
+        );
     }
 
-    @Test
-    public void repeat3RuleTest() {
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
-
+    @DisplayName("Test for repeat rule: 2 times")
+    @ParameterizedTest
+    @MethodSource
+    void repeat2RuleTest(int index, boolean crossUpExpected, boolean repeatExpected) {
         Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
-        Assertions.assertFalse(crossUpRule.isSatisfied(0));
-        Assertions.assertFalse(crossUpRule.isSatisfied(1));
-        Assertions.assertFalse(crossUpRule.isSatisfied(2));
-        Assertions.assertTrue(crossUpRule.isSatisfied(3));
-        Assertions.assertFalse(crossUpRule.isSatisfied(4));
-        Assertions.assertFalse(crossUpRule.isSatisfied(5));
-        Assertions.assertFalse(crossUpRule.isSatisfied(6));
-        Assertions.assertTrue(crossUpRule.isSatisfied(7));
-        Assertions.assertFalse(crossUpRule.isSatisfied(8));
-        Assertions.assertFalse(crossUpRule.isSatisfied(9));
-        Assertions.assertFalse(crossUpRule.isSatisfied(10));
-        Assertions.assertTrue(crossUpRule.isSatisfied(11));
+        Rule repeatRule = new RepeatRule(crossUpRule, 2, 10);
 
+        Assertions.assertEquals(crossUpExpected, crossUpRule.isSatisfied(index));
+        Assertions.assertEquals(repeatExpected, repeatRule.isSatisfied(index));
+    }
+
+    private static Stream<Arguments> repeat3RuleTest() {
+        return Stream.of(
+                Arguments.of(0, false, false),
+                Arguments.of(1, false, false),
+                Arguments.of(2, false, false),
+                Arguments.of(3, true, false),
+                Arguments.of(4, false, false),
+                Arguments.of(5, false, false),
+                Arguments.of(6, false, false),
+                Arguments.of(7, true, false),
+                Arguments.of(8, false, false),
+                Arguments.of(9, false, false),
+                Arguments.of(10, false, false),
+                Arguments.of(11, true, true)
+        );
+    }
+
+    @DisplayName("Test for repeat rule: 3 times")
+    @ParameterizedTest
+    @MethodSource
+    void repeat3RuleTest(int index, boolean crossUpExpected, boolean repeatExpected) {
+        Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
         Rule repeatRule = new RepeatRule(crossUpRule, 3, 10);
-        Assertions.assertFalse(repeatRule.isSatisfied(0));
-        Assertions.assertFalse(repeatRule.isSatisfied(1));
-        Assertions.assertFalse(repeatRule.isSatisfied(2));
-        Assertions.assertFalse(repeatRule.isSatisfied(3));
-        Assertions.assertFalse(repeatRule.isSatisfied(4));
-        Assertions.assertFalse(repeatRule.isSatisfied(5));
-        Assertions.assertFalse(repeatRule.isSatisfied(6));
-        Assertions.assertFalse(repeatRule.isSatisfied(7));
-        Assertions.assertFalse(repeatRule.isSatisfied(8));
-        Assertions.assertFalse(repeatRule.isSatisfied(9));
-        Assertions.assertFalse(repeatRule.isSatisfied(10));
-        Assertions.assertTrue(repeatRule.isSatisfied(11));
+
+        Assertions.assertEquals(repeatExpected, repeatRule.isSatisfied(index));
+        Assertions.assertEquals(crossUpExpected, crossUpRule.isSatisfied(index));
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        evaluatedIndicator = null;
     }
 }

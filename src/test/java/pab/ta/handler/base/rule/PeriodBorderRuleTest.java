@@ -1,11 +1,9 @@
 package pab.ta.handler.base.rule;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.ta4j.core.BarSeries;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.ta4j.core.BaseBarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.Rule;
@@ -13,110 +11,90 @@ import org.ta4j.core.indicators.helpers.FixedDecimalIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.rules.CrossedUpIndicatorRule;
-import pab.ta.handler.base.rule.PeriodBorderRule;
-import pab.ta.handler.base.rule.RepeatRule;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-@ExtendWith(MockitoExtension.class)
-public class PeriodBorderRuleTest {
+class PeriodBorderRuleTest {
 
-    private BarSeries series;
+    private static Indicator<Num> evaluatedIndicator;
+    private static Rule crossUp85Rule;
+    private static Rule crossDown125Rule;
 
-    @BeforeEach
-    public void setUp() {
-        series = new BaseBarSeries();
+    @BeforeAll
+    static void initAll() {
+        evaluatedIndicator = new FixedDecimalIndicator(new BaseBarSeries(), 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
+        crossUp85Rule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
+        crossDown125Rule = new CrossedDownIndicatorRule(evaluatedIndicator, 125);
+    }
+
+    @AfterAll
+    static void tearDown() {
+        evaluatedIndicator = null;
+        crossUp85Rule = null;
+        crossDown125Rule = null;
     }
 
 
     @Test
-    public void newPeriodBorderRuleTest() {
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
-        Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
+    void newPeriodBorderRuleTest() {
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new PeriodBorderRule(List.of(crossUpRule, crossUpRule), 0));
-        Assertions.assertDoesNotThrow(() -> new PeriodBorderRule(crossUpRule, 1));
-        Assertions.assertDoesNotThrow(() -> new PeriodBorderRule(List.of(crossUpRule), 1));
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> new PeriodBorderRule(List.of(crossUp85Rule, crossUp85Rule), 0));
+        Assertions.assertDoesNotThrow(() -> new PeriodBorderRule(crossUp85Rule, 1));
+        Assertions.assertDoesNotThrow(() -> new PeriodBorderRule(List.of(crossUp85Rule), 1));
     }
 
-    @Test
-    public void periodSingleRuleTest() {
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
-
-        Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
-        Assertions.assertFalse(crossUpRule.isSatisfied(0));
-        Assertions.assertFalse(crossUpRule.isSatisfied(1));
-        Assertions.assertFalse(crossUpRule.isSatisfied(2));
-        Assertions.assertTrue(crossUpRule.isSatisfied(3));
-        Assertions.assertFalse(crossUpRule.isSatisfied(4));
-        Assertions.assertFalse(crossUpRule.isSatisfied(5));
-        Assertions.assertFalse(crossUpRule.isSatisfied(6));
-        Assertions.assertTrue(crossUpRule.isSatisfied(7));
-        Assertions.assertFalse(crossUpRule.isSatisfied(8));
-        Assertions.assertFalse(crossUpRule.isSatisfied(9));
-        Assertions.assertFalse(crossUpRule.isSatisfied(10));
-        Assertions.assertTrue(crossUpRule.isSatisfied(11));
-
-        Rule rule = new PeriodBorderRule(crossUpRule, 3);
-        Assertions.assertFalse(rule.isSatisfied(0));
-        Assertions.assertFalse(rule.isSatisfied(1));
-        Assertions.assertFalse(rule.isSatisfied(2));
-        Assertions.assertTrue(rule.isSatisfied(3));
-        Assertions.assertTrue(rule.isSatisfied(4));
-        Assertions.assertTrue(rule.isSatisfied(5));
-        Assertions.assertFalse(rule.isSatisfied(6));
-        Assertions.assertTrue(rule.isSatisfied(7));
-        Assertions.assertTrue(rule.isSatisfied(8));
-        Assertions.assertTrue(rule.isSatisfied(9));
-        Assertions.assertFalse(rule.isSatisfied(10));
-        Assertions.assertTrue(rule.isSatisfied(11));
+    private static Stream<Arguments> periodBorder3Rule() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(1, false),
+                Arguments.of(2, false),
+                Arguments.of(3, true),
+                Arguments.of(4, true),
+                Arguments.of(5, true),
+                Arguments.of(6, false),
+                Arguments.of(7, true),
+                Arguments.of(8, true),
+                Arguments.of(9, true),
+                Arguments.of(10, false),
+                Arguments.of(11, true)
+        );
     }
 
-    @Test
-    public void periodBorderRuleListTest() {
-        Indicator<Num> evaluatedIndicator = new FixedDecimalIndicator(series, 100, 90, 80, 90, 100, 130, 80, 90, 100, 140, 80, 100);
+    @DisplayName("Test for border 3 period")
+    @ParameterizedTest
+    @MethodSource
+    void periodBorder3Rule(int index, boolean expected) {
+        Rule rule = new PeriodBorderRule(crossUp85Rule, 3);
 
-        Rule crossUpRule = new CrossedUpIndicatorRule(evaluatedIndicator, 85);
-        Assertions.assertFalse(crossUpRule.isSatisfied(0));
-        Assertions.assertFalse(crossUpRule.isSatisfied(1));
-        Assertions.assertFalse(crossUpRule.isSatisfied(2));
-        Assertions.assertTrue(crossUpRule.isSatisfied(3));
-        Assertions.assertFalse(crossUpRule.isSatisfied(4));
-        Assertions.assertFalse(crossUpRule.isSatisfied(5));
-        Assertions.assertFalse(crossUpRule.isSatisfied(6));
-        Assertions.assertTrue(crossUpRule.isSatisfied(7));
-        Assertions.assertFalse(crossUpRule.isSatisfied(8));
-        Assertions.assertFalse(crossUpRule.isSatisfied(9));
-        Assertions.assertFalse(crossUpRule.isSatisfied(10));
-        Assertions.assertTrue(crossUpRule.isSatisfied(11));
+        Assertions.assertEquals(expected, rule.isSatisfied(index));
+    }
 
-        Rule crossDownRule = new CrossedDownIndicatorRule(evaluatedIndicator, 125);
-        Assertions.assertFalse(crossDownRule.isSatisfied(0));
-        Assertions.assertFalse(crossDownRule.isSatisfied(1));
-        Assertions.assertFalse(crossDownRule.isSatisfied(2));
-        Assertions.assertFalse(crossDownRule.isSatisfied(3));
-        Assertions.assertFalse(crossDownRule.isSatisfied(4));
-        Assertions.assertFalse(crossDownRule.isSatisfied(5));
-        Assertions.assertTrue(crossDownRule.isSatisfied(6));
-        Assertions.assertFalse(crossDownRule.isSatisfied(7));
-        Assertions.assertFalse(crossDownRule.isSatisfied(8));
-        Assertions.assertFalse(crossDownRule.isSatisfied(9));
-        Assertions.assertTrue(crossDownRule.isSatisfied(10));
-        Assertions.assertFalse(crossDownRule.isSatisfied(11));
+    private static Stream<Arguments> periodBorder3RuleList() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(1, false),
+                Arguments.of(2, false),
+                Arguments.of(3, false),
+                Arguments.of(4, false),
+                Arguments.of(5, false),
+                Arguments.of(6, false),
+                Arguments.of(7, true),
+                Arguments.of(8, true),
+                Arguments.of(9, false),
+                Arguments.of(10, false),
+                Arguments.of(11, true)
+        );
+    }
 
-        Rule rule = new PeriodBorderRule(List.of(crossDownRule, crossUpRule), 3);
-        Assertions.assertFalse(rule.isSatisfied(0));
-        Assertions.assertFalse(rule.isSatisfied(1));
-        Assertions.assertFalse(rule.isSatisfied(2));
-        Assertions.assertFalse(rule.isSatisfied(3));
-        Assertions.assertFalse(rule.isSatisfied(4));
-        Assertions.assertFalse(rule.isSatisfied(5));
-        Assertions.assertFalse(rule.isSatisfied(6));
-        Assertions.assertTrue(rule.isSatisfied(7));
-        Assertions.assertTrue(rule.isSatisfied(8));
-        Assertions.assertFalse(rule.isSatisfied(9));
-        Assertions.assertFalse(rule.isSatisfied(10));
-        Assertions.assertTrue(rule.isSatisfied(11));
+    @DisplayName("Test for rule list border 3 period")
+    @ParameterizedTest
+    @MethodSource
+    void periodBorder3RuleList(int index, boolean expected) {
+        Rule rule = new PeriodBorderRule(List.of(crossUp85Rule, crossDown125Rule), 3);
+
+        Assertions.assertEquals(expected, rule.isSatisfied(index));
     }
 
 }

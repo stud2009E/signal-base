@@ -18,7 +18,7 @@ public class AvgMaxIndicator extends AbstractIndicator<Num> {
     Rule overRule;
     Rule peakRule;
 
-    public AvgMaxIndicator(Indicator<Num> indicator, Num upBorder){
+    public AvgMaxIndicator(Indicator<Num> indicator, Num upBorder) {
         super(indicator.getBarSeries());
 
         this.indicator = indicator;
@@ -33,25 +33,22 @@ public class AvgMaxIndicator extends AbstractIndicator<Num> {
         List<Double> maxValues = new ArrayList<>();
 
         for (int i = index; i > 0; i--) {
-            if(overRule.isSatisfied(i - 1) && peakRule.isSatisfied(i)){
-                maxValues.add(indicator.getValue(i-1).doubleValue());
+            if (overRule.isSatisfied(i - 1) && peakRule.isSatisfied(i)) {
+                maxValues.add(indicator.getValue(i - 1).doubleValue());
             }
         }
 
-        if (maxValues.isEmpty()){
+        if (maxValues.isEmpty()) {
             return upBorder;
         }
 
-        if (maxValues.size() == 1){
-            maxValues.add(upBorder.doubleValue());
+        if (maxValues.size() == 1) {
+            return DecimalNum.valueOf((maxValues.getFirst() + upBorder.doubleValue()) / 2);
         }
 
-        Double avg =  maxValues.stream()
-                .mapToDouble(value -> value)
-                .average()
-                .orElseGet(upBorder::doubleValue);
+        maxValues.sort((a, b) -> -(int) (a - b));
 
-        return DecimalNum.valueOf(avg);
+        return DecimalNum.valueOf((maxValues.get(0) + maxValues.get(1)) / 2);
     }
 
     @Override

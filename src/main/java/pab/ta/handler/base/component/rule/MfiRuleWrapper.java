@@ -39,9 +39,4 @@ public class MfiRuleWrapper extends RuleWrapper {
     public boolean applicableForType(AssetType type) {
         return List.of(AssetType.FUTURE, AssetType.CURRENCY, AssetType.SHARE).contains(type);
     }
-
-    @Override
-    public boolean applicableForInterval(CandleInterval interval) {
-        return List.of(CandleInterval.DAY, CandleInterval.WEEK).contains(interval);
-    }
 }

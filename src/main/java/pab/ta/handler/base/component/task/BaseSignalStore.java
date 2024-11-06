@@ -1,5 +1,6 @@
 package pab.ta.handler.base.component.task;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pab.ta.handler.base.asset.*;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class BaseSignalStore implements SignalStore {
 
     @Value("${signal.live-time-minutes:30}")
+    @Setter
     private Long signalLiveTime;
 
     private final Set<Signal> cache = new HashSet<>();

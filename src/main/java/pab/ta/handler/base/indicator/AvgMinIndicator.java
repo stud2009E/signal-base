@@ -18,7 +18,7 @@ public class AvgMinIndicator extends AbstractIndicator<Num> {
     Rule underRule;
     Rule hollowRule;
 
-    public AvgMinIndicator(Indicator<Num> indicator, Num lowBorder){
+    public AvgMinIndicator(Indicator<Num> indicator, Num lowBorder) {
         super(indicator.getBarSeries());
 
         this.indicator = indicator;
@@ -33,25 +33,22 @@ public class AvgMinIndicator extends AbstractIndicator<Num> {
         List<Double> minValues = new ArrayList<>();
 
         for (int i = index; i > 0; i--) {
-            if(underRule.isSatisfied(i - 1) && hollowRule.isSatisfied(i)){
-                minValues.add(indicator.getValue(i-1).doubleValue());
+            if (underRule.isSatisfied(i - 1) && hollowRule.isSatisfied(i)) {
+                minValues.add(indicator.getValue(i - 1).doubleValue());
             }
         }
 
-        if (minValues.isEmpty()){
+        if (minValues.isEmpty()) {
             return lowBorder;
         }
 
-        if (minValues.size() == 1){
-            minValues.add(lowBorder.doubleValue());
+        if (minValues.size() == 1) {
+            return DecimalNum.valueOf((minValues.getFirst() + lowBorder.doubleValue()) / 2);
         }
 
-        Double avg =  minValues.stream()
-                .mapToDouble(value -> value)
-                .average()
-                .orElseGet(lowBorder::doubleValue);
+        minValues.sort((a, b) -> (int) (a - b));
 
-        return DecimalNum.valueOf(avg);
+        return DecimalNum.valueOf((minValues.get(0) + minValues.get(1)) / 2);
     }
 
     @Override
