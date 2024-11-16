@@ -8,6 +8,8 @@ import org.ta4j.core.num.DecimalNum;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.rules.CrossedUpIndicatorRule;
+import org.ta4j.core.rules.OverIndicatorRule;
+import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.asset.BaseRuleIdentity;
 import pab.ta.handler.base.asset.Direction;
 import pab.ta.handler.base.asset.RuleIdentity;
@@ -31,9 +33,9 @@ public class CciExtremumRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "CCI avgMax(100) up", CCI_EXTREMUM, container.identity(), new CrossedUpIndicatorRule(indicator, avgMax), Direction.SELL),
+                        "CCI avgMax(100) up", CCI_EXTREMUM, container.identity(), new OverIndicatorRule(indicator, avgMax), Direction.SELL),
                 new BaseRuleIdentity(
-                        "CCI avgMin(-100) down", CCI_EXTREMUM, container.identity(), new CrossedDownIndicatorRule(indicator, avgMin), Direction.BUY)
+                        "CCI avgMin(-100) down", CCI_EXTREMUM, container.identity(), new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
         );
     }
 

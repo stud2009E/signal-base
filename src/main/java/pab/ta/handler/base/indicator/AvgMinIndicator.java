@@ -43,7 +43,8 @@ public class AvgMinIndicator extends AbstractIndicator<Num> {
         }
 
         if (minValues.size() == 1) {
-            return DecimalNum.valueOf((minValues.getFirst() + lowBorder.doubleValue()) / 2);
+            double delta = (minValues.getFirst() - lowBorder.doubleValue()) / 10;
+            return DecimalNum.valueOf(minValues.getFirst() - delta);
         }
 
         minValues.sort((a, b) -> (int) (a - b));

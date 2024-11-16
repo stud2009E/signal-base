@@ -9,6 +9,8 @@ import org.ta4j.core.num.DecimalNum;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.rules.CrossedUpIndicatorRule;
+import org.ta4j.core.rules.OverIndicatorRule;
+import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.asset.BaseRuleIdentity;
 import pab.ta.handler.base.asset.Direction;
 import pab.ta.handler.base.asset.RuleIdentity;
@@ -32,9 +34,9 @@ public class RsiExtremumRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "RSI avgMax(70) up", RSI_EXTREMUM, container.identity(), new CrossedUpIndicatorRule(indicator, avgMax), Direction.SELL),
+                        "RSI avgMax(70) up", RSI_EXTREMUM, container.identity(), new OverIndicatorRule(indicator, avgMax), Direction.SELL),
                 new BaseRuleIdentity(
-                        "RSI avgMin(30) down", RSI_EXTREMUM, container.identity(), new CrossedDownIndicatorRule(indicator, avgMin), Direction.BUY)
+                        "RSI avgMin(30) down", RSI_EXTREMUM, container.identity(), new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
         );
     }
 

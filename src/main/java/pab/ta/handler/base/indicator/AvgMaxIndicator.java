@@ -43,7 +43,8 @@ public class AvgMaxIndicator extends AbstractIndicator<Num> {
         }
 
         if (maxValues.size() == 1) {
-            return DecimalNum.valueOf((maxValues.getFirst() + upBorder.doubleValue()) / 2);
+            double delta = (maxValues.getFirst() - upBorder.doubleValue()) / 10;
+            return DecimalNum.valueOf(maxValues.getFirst() - delta);
         }
 
         maxValues.sort((a, b) -> -(int) (a - b));

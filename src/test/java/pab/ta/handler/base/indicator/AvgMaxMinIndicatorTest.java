@@ -68,10 +68,10 @@ class AvgMaxMinIndicatorTest {
                 Arguments.of(3, 110),
                 Arguments.of(4, 110),
                 Arguments.of(5, 110),
-                Arguments.of(6, 120),
-                Arguments.of(7, 120),
-                Arguments.of(8, 120),
-                Arguments.of(9, 120),
+                Arguments.of(6, 128),
+                Arguments.of(7, 128),
+                Arguments.of(8, 128),
+                Arguments.of(9, 128),
                 Arguments.of(10, 140),
                 Arguments.of(11, 140)
         );
@@ -91,14 +91,14 @@ class AvgMaxMinIndicatorTest {
                 Arguments.of(0, 30),
                 Arguments.of(1, 30),
                 Arguments.of(2, 30),
-                Arguments.of(3, 25),
-                Arguments.of(4, 25),
-                Arguments.of(5, 25),
-                Arguments.of(6, 25),
-                Arguments.of(7, 25),
-                Arguments.of(8, 25),
-                Arguments.of(9, 25),
-                Arguments.of(10, 25),
+                Arguments.of(3, 21),
+                Arguments.of(4, 21),
+                Arguments.of(5, 21),
+                Arguments.of(6, 21),
+                Arguments.of(7, 21),
+                Arguments.of(8, 21),
+                Arguments.of(9, 21),
+                Arguments.of(10, 21),
                 Arguments.of(11, 15)
         );
     }
