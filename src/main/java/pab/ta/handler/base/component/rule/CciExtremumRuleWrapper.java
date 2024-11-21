@@ -6,8 +6,6 @@ import org.ta4j.core.Indicator;
 import org.ta4j.core.indicators.CCIIndicator;
 import org.ta4j.core.num.DecimalNum;
 import org.ta4j.core.num.Num;
-import org.ta4j.core.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.rules.CrossedUpIndicatorRule;
 import org.ta4j.core.rules.OverIndicatorRule;
 import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.asset.BaseRuleIdentity;

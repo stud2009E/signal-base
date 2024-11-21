@@ -6,5 +6,6 @@ public enum RuleGroup {
     MFI,
     DVG,
     RSI_EXTREMUM,
-    CCI_EXTREMUM;
+    CCI_EXTREMUM,
+    VOLATILITY;
 }
