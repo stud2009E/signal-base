@@ -31,12 +31,7 @@ public class BBWidthMin extends AbstractIndicator<Num> {
         }
         values.sort(Comparator.comparingInt(Num::intValue));
 
-        DoubleSummaryStatistics avg = values.stream()
-                .limit(10)
-                .mapToDouble(Num::doubleValue)
-                .summaryStatistics();
-
-        return DecimalNum.valueOf(avg.getAverage());
+        return values.getFirst();
     }
 
     @Override
