@@ -39,11 +39,10 @@ public class BaseTaskHandler extends EventBus implements TaskHandler {
             infoProvider
                     .info()
                     .stream()
-                    .map(assetInfo -> new BaseSeriesIdentity(assetInfo, tf))
-                    .map(identity -> new BaseSeriesContainer(provider, identity))
+                    .map(assetInfo -> new BaseSeriesContainer(tf, assetInfo, provider))
                     .forEach(seriesContainer -> {
-                        BarSeries series = seriesContainer.series();
-                        AssetType type = seriesContainer.identity().info().type();
+                        BarSeries series = seriesContainer.getSeries();
+                        AssetType type = seriesContainer.getAssetInfo().getType();
 
                         if (series.isEmpty()) {
                             return;
@@ -51,7 +50,7 @@ public class BaseTaskHandler extends EventBus implements TaskHandler {
 
                         ruleWrappers.forEach(ruleWrapper -> {
                             if (ruleWrapper.applicableForType(type)
-                                    && ruleWrapper.applicableForInterval(tf.interval())) {
+                                    && ruleWrapper.applicableForInterval(tf.getInterval())) {
                                 ruleWrapper.setSeriesContainer(seriesContainer);
 
                                 ruleWrapper.rules().forEach(ruleIdentity -> {

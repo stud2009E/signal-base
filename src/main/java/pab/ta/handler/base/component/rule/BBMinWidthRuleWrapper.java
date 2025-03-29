@@ -21,17 +21,17 @@ public class BBMinWidthRuleWrapper extends RuleWrapper {
     @Override
     public List<RuleIdentity> rules() {
         Indicator<Num> bbWidth = indicator();
-        Indicator<Num> bbWidthMin = new BBWidthMin(container.series(), 14);
+        Indicator<Num> bbWidthMin = new BBWidthMin(container.getSeries(), 14);
 
         return List.of(
                 new BaseRuleIdentity(
-                        "BB width volatility", VOLATILITY, container.identity(), new UnderIndicatorRule(bbWidth, bbWidthMin), Direction.SELL)
+                        "BB width volatility", VOLATILITY, new UnderIndicatorRule(bbWidth, bbWidthMin), Direction.SELL)
         );
     }
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
 
         return new BBWidth(series, 14);
     }

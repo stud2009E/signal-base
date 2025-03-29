@@ -31,15 +31,15 @@ public class CciExtremumRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "CCI avgMax(100) up", CCI_EXTREMUM, container.identity(), new OverIndicatorRule(indicator, avgMax), Direction.SELL),
+                        "CCI avgMax(100) up", CCI_EXTREMUM, new OverIndicatorRule(indicator, avgMax), Direction.SELL),
                 new BaseRuleIdentity(
-                        "CCI avgMin(-100) down", CCI_EXTREMUM, container.identity(), new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
+                        "CCI avgMin(-100) down", CCI_EXTREMUM, new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
         );
     }
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
 
         return new CCIIndicator(series, 20);
     }

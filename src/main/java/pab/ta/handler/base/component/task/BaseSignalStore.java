@@ -30,12 +30,12 @@ public class BaseSignalStore implements SignalStore {
         TimeFrame tf = ruleIdentity.seriesIdentity().tf();
 
         Signal signal = BaseSignal.builder()
-                .ticker(info.ticker())
-                .interval(tf.interval())
+                .ticker(info.getTicker())
+                .interval(tf.getInterval())
                 .direction(ruleIdentity.direction())
                 .ruleId(ruleIdentity.id())
                 .direction(ruleIdentity.direction())
-                .type(info.type())
+                .type(info.getType())
                 .ruleGroup(ruleIdentity.group())
                 .createdAt(LocalDateTime.now())
                 .build();

@@ -7,8 +7,6 @@ import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.num.DecimalNum;
 import org.ta4j.core.num.Num;
-import org.ta4j.core.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.rules.CrossedUpIndicatorRule;
 import org.ta4j.core.rules.OverIndicatorRule;
 import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.asset.BaseRuleIdentity;
@@ -34,15 +32,15 @@ public class RsiExtremumRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "RSI avgMax(70) up", RSI_EXTREMUM, container.identity(), new OverIndicatorRule(indicator, avgMax), Direction.SELL),
+                        "RSI avgMax(70) up", RSI_EXTREMUM, new OverIndicatorRule(indicator, avgMax), Direction.SELL),
                 new BaseRuleIdentity(
-                        "RSI avgMin(30) down", RSI_EXTREMUM, container.identity(), new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
+                        "RSI avgMin(30) down", RSI_EXTREMUM, new UnderIndicatorRule(indicator, avgMin), Direction.BUY)
         );
     }
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
 
         return new RSIIndicator(new ClosePriceIndicator(series), 14);
     }

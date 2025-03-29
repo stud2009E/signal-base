@@ -3,7 +3,9 @@ package pab.ta.handler.base.asset;
 import org.ta4j.core.BarSeries;
 
 public interface SeriesContainer {
-    BarSeries series();
+    BarSeries getSeries();
 
-    SeriesIdentity identity();
+    AssetInfo getAssetInfo();
+
+    TimeFrame getTimeFrame();
 }

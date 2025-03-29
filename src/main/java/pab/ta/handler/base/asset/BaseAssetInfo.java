@@ -1,9 +1,12 @@
 package pab.ta.handler.base.asset;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Getter
 public class BaseAssetInfo implements AssetInfo {
 
     private final String id;
@@ -22,37 +25,13 @@ public class BaseAssetInfo implements AssetInfo {
         this.type = type;
         this.description = description;
 
-        if (Objects.nonNull(properties)){
+        if (Objects.nonNull(properties)) {
             this.properties.putAll(properties);
         }
     }
 
-    public Object addProperty(String key, Object value){
+    @Override
+    public Object addProperty(String key, Object value) {
         return properties.putIfAbsent(key, value);
-    }
-
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public String ticker() {
-        return ticker;
-    }
-
-    @Override
-    public AssetType type() {
-        return type;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    @Override
-    public Map<String, Object> properties() {
-        return Map.copyOf(properties);
     }
 }

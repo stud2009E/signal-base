@@ -8,7 +8,9 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.OverIndicatorRule;
 import org.ta4j.core.rules.UnderIndicatorRule;
-import pab.ta.handler.base.asset.*;
+import pab.ta.handler.base.asset.BaseRuleIdentity;
+import pab.ta.handler.base.asset.Direction;
+import pab.ta.handler.base.asset.RuleIdentity;
 
 import java.util.List;
 
@@ -23,15 +25,15 @@ public class RsiRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "RSI > 70", RSI, container.identity(), new OverIndicatorRule(indicator, 70), Direction.SELL),
+                        "RSI > 70", RSI, new OverIndicatorRule(indicator, 70), Direction.SELL),
                 new BaseRuleIdentity(
-                        "RSI < 30", RSI, container.identity(), new UnderIndicatorRule(indicator, 30), Direction.BUY)
+                        "RSI < 30", RSI, new UnderIndicatorRule(indicator, 30), Direction.BUY)
         );
     }
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
 
         return new RSIIndicator(new ClosePriceIndicator(series), 14);
     }

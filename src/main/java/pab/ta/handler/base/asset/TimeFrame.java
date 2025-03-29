@@ -3,9 +3,9 @@ package pab.ta.handler.base.asset;
 import java.time.LocalDateTime;
 
 public interface TimeFrame {
-    CandleInterval interval();
+    CandleInterval getInterval();
 
-    LocalDateTime from();
+    LocalDateTime getFrom();
 
-    LocalDateTime to();
+    LocalDateTime getTo();
 }

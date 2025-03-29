@@ -19,7 +19,7 @@ import static pab.ta.handler.base.component.rule.RuleGroup.DVG;
 public class DivergenceRuleWrapper extends RuleWrapper {
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
         return new CCIIndicator(series, 14);
     }
 
@@ -29,7 +29,7 @@ public class DivergenceRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "diver sell", DVG, container.identity(), new DivergenceSellRule(indicator(), DecimalNum.valueOf(100)), Direction.SELL)
+                        "diver sell", DVG, new DivergenceSellRule(indicator(), DecimalNum.valueOf(100)), Direction.SELL)
         );
     }
 }

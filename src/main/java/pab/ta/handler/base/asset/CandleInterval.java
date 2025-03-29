@@ -4,5 +4,6 @@ public enum CandleInterval {
     HOUR_2,
     HOUR_4,
     DAY,
-    WEEK
+    WEEK,
+    MONTH
 }

@@ -54,7 +54,7 @@ public class BaseSignalSelector implements SignalSelector {
     public void selectOnEvent(TimeFrame tf) {
         getFilters()
                 .stream()
-                .filter(filter -> filter.rules().containsKey(tf.interval()))
+                .filter(filter -> filter.rules().containsKey(tf.getInterval()))
                 .forEach(filter -> {
                     Set<String> result = store.findTicker(filter);
                     logResult(result, filter);

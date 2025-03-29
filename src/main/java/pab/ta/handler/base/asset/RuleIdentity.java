@@ -5,8 +5,10 @@ import pab.ta.handler.base.component.rule.RuleGroup;
 
 public interface RuleIdentity {
     String id();
+
     RuleGroup group();
-    SeriesIdentity seriesIdentity();
+
     Rule rule();
+
     Direction direction();
 }

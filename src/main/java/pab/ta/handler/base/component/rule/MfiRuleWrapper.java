@@ -22,15 +22,15 @@ public class MfiRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "MFI > 80", MFI, container.identity(), new OverIndicatorRule(indicator, 80), Direction.SELL),
+                        "MFI > 80", MFI, new OverIndicatorRule(indicator, 80), Direction.SELL),
                 new BaseRuleIdentity(
-                        "MFI < 20", MFI, container.identity(), new UnderIndicatorRule(indicator, 20), Direction.BUY)
+                        "MFI < 20", MFI, new UnderIndicatorRule(indicator, 20), Direction.BUY)
         );
     }
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
 
         return new MoneyFlowIndexIndicator(series, 14);
     }

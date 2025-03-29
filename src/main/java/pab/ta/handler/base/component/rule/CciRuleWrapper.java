@@ -20,7 +20,7 @@ public class CciRuleWrapper extends RuleWrapper {
 
     @Override
     protected Indicator<Num> indicator() {
-        BarSeries series = container.series();
+        BarSeries series = container.getSeries();
         return new CCIIndicator(series, 20);
     }
 
@@ -30,9 +30,9 @@ public class CciRuleWrapper extends RuleWrapper {
 
         return List.of(
                 new BaseRuleIdentity(
-                        "CCI > 100", CCI, container.identity(), new OverIndicatorRule(indicator, 100), Direction.SELL),
+                        "CCI > 100", CCI, new OverIndicatorRule(indicator, 100), Direction.SELL),
                 new BaseRuleIdentity(
-                        "CCI < -100", CCI, container.identity(), new UnderIndicatorRule(indicator, -100), Direction.BUY)
+                        "CCI < -100", CCI, new UnderIndicatorRule(indicator, -100), Direction.BUY)
         );
     }
 }

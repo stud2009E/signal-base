@@ -1,15 +1,11 @@
 package pab.ta.handler.base.provider;
 
 import org.ta4j.core.BarSeries;
-import pab.ta.handler.base.asset.SeriesIdentity;
+import pab.ta.handler.base.asset.AssetInfo;
+import pab.ta.handler.base.asset.TimeFrame;
 
 
 public interface DataProvider {
 
-    /**
-     * get asset data series
-     * @param identity full info about asset
-     * @return series with candles
-     */
-    BarSeries getSeries(SeriesIdentity identity);
+    BarSeries getSeries(AssetInfo info, TimeFrame tf);
 }
