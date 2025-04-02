@@ -17,7 +17,7 @@ import pab.ta.handler.base.indicator.AvgMinIndicator;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.RSI_EXTREMUM;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.RSI_EXTREMUM;
 
 @Component
 public class RsiExtremumRuleWrapper extends RuleWrapper {

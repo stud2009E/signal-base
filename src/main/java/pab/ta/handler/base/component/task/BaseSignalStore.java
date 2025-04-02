@@ -4,7 +4,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pab.ta.handler.base.asset.*;
-import pab.ta.handler.base.component.rule.RuleGroup;
+import pab.ta.handler.base.component.rule.IndicatorGroup;
 import pab.ta.handler.base.task.Signal;
 import pab.ta.handler.base.task.SignalSelector;
 import pab.ta.handler.base.task.SignalStore;
@@ -52,7 +52,7 @@ public class BaseSignalStore implements SignalStore {
         boolean isFirst = true;
 
         for (CandleInterval interval : filter.rules().keySet()) {
-            for (RuleGroup ruleGroup : filter.rules().get(interval)) {
+            for (IndicatorGroup ruleGroup : filter.rules().get(interval)) {
                 Set<String> temp = filterSignalsBy(ruleGroup, interval, filter.direction());
 
                 if (isFirst) {
@@ -75,12 +75,12 @@ public class BaseSignalStore implements SignalStore {
      * @param direction BUY or SELL
      * @return tickers
      */
-    private Set<String> filterSignalsBy(RuleGroup ruleGroup, CandleInterval interval, Direction direction) {
+    private Set<String> filterSignalsBy(IndicatorGroup ruleGroup, CandleInterval interval, Direction direction) {
         LocalDateTime now = LocalDateTime.now();
 
         return cache.parallelStream()
                 .filter(signal -> now.minusMinutes(signalLiveTime).isBefore(signal.getCreatedAt()))
-                .filter(signal -> signal.getRuleGroup().equals(ruleGroup) &&
+                .filter(signal -> signal.getIndicatorGroup().equals(ruleGroup) &&
                         signal.getInterval().equals(interval) &&
                         signal.getDirection().equals(direction)
                 )

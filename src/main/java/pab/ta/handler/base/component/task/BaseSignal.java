@@ -1,15 +1,10 @@
 package pab.ta.handler.base.component.task;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import pab.ta.handler.base.asset.AssetType;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.asset.Direction;
-import pab.ta.handler.base.component.rule.RuleGroup;
+import pab.ta.handler.base.component.rule.IndicatorGroup;
 import pab.ta.handler.base.task.Signal;
 
 import java.time.LocalDateTime;
@@ -21,18 +16,23 @@ import java.time.LocalDateTime;
 public class BaseSignal implements Signal {
     @EqualsAndHashCode.Include
     @ToString.Include
-    String ticker;
+    private String ticker;
+
+    private AssetType type;
+
     @EqualsAndHashCode.Include
     @ToString.Include
-    CandleInterval interval;
+    private CandleInterval interval;
+
     @ToString.Include
     @EqualsAndHashCode.Include
-    String ruleId;
+    private String indicatorName;
+
     @ToString.Include
     @EqualsAndHashCode.Include
-    Direction direction;
-    AssetType type;
-    @Enumerated(EnumType.STRING)
-    RuleGroup ruleGroup;
-    LocalDateTime createdAt;
+    private Direction direction;
+
+    private IndicatorGroup indicatorGroup;
+
+    private LocalDateTime createdAt;
 }

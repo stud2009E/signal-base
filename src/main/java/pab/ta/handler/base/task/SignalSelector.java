@@ -4,13 +4,13 @@ import com.google.common.base.Strings;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.asset.Direction;
 import pab.ta.handler.base.asset.TimeFrame;
-import pab.ta.handler.base.component.rule.RuleGroup;
+import pab.ta.handler.base.component.rule.IndicatorGroup;
 
 import java.util.*;
 
 public interface SignalSelector {
 
-    record SignalFilter(Map<CandleInterval, List<RuleGroup>> rules, Direction direction) {
+    record SignalFilter(Map<CandleInterval, List<IndicatorGroup>> rules, Direction direction) {
     }
 
     void selectOnEvent(TimeFrame tf);

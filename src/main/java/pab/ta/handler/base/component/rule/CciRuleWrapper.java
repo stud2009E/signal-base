@@ -13,7 +13,7 @@ import pab.ta.handler.base.asset.RuleIdentity;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.CCI;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.CCI;
 
 @Component
 public class CciRuleWrapper extends RuleWrapper {

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.ta4j.core.BarSeries;
 import pab.ta.handler.base.asset.AssetType;
 import pab.ta.handler.base.asset.BaseSeriesContainer;
-import pab.ta.handler.base.asset.BaseSeriesIdentity;
 import pab.ta.handler.base.asset.TimeFrame;
 import pab.ta.handler.base.component.rule.RuleWrapper;
 import pab.ta.handler.base.provider.AssetInfoProvider;

@@ -1,6 +1,6 @@
 package pab.ta.handler.base.component.rule;
 
-public enum RuleGroup {
+public enum IndicatorGroup {
     CCI,
     RSI,
     MFI,

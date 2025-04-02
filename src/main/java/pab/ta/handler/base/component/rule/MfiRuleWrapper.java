@@ -11,7 +11,7 @@ import pab.ta.handler.base.asset.*;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.MFI;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.MFI;
 
 @Component
 public class MfiRuleWrapper extends RuleWrapper {

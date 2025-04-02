@@ -13,7 +13,7 @@ import pab.ta.handler.base.rule.DivergenceSellRule;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.DVG;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.DVG;
 
 @Component
 public class DivergenceRuleWrapper extends RuleWrapper {

@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static pab.ta.handler.base.asset.CandleInterval.*;
-import static pab.ta.handler.base.component.rule.RuleGroup.CCI;
-import static pab.ta.handler.base.component.rule.RuleGroup.RSI;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.CCI;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.RSI;
 
 @Component
 @RequiredArgsConstructor

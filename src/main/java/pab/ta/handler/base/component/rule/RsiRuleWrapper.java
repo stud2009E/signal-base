@@ -14,7 +14,7 @@ import pab.ta.handler.base.asset.RuleIdentity;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.RSI;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.RSI;
 
 @Component
 public class RsiRuleWrapper extends RuleWrapper {

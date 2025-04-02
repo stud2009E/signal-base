@@ -1,6 +1,5 @@
 package pab.ta.handler.base.component.rule;
 
-import org.springframework.stereotype.Component;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.num.Num;
@@ -13,9 +12,8 @@ import pab.ta.handler.base.indicator.BBWidthMin;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.VOLATILITY;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.VOLATILITY;
 
-@Component
 public class BBMinWidthRuleWrapper extends RuleWrapper {
 
     @Override

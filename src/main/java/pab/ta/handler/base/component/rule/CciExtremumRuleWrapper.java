@@ -16,7 +16,7 @@ import pab.ta.handler.base.indicator.AvgMinIndicator;
 
 import java.util.List;
 
-import static pab.ta.handler.base.component.rule.RuleGroup.CCI_EXTREMUM;
+import static pab.ta.handler.base.component.rule.IndicatorGroup.CCI_EXTREMUM;
 
 @Component
 public class CciExtremumRuleWrapper extends RuleWrapper {
