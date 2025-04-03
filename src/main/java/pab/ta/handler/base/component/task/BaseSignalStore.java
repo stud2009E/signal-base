@@ -2,8 +2,8 @@ package pab.ta.handler.base.component.task;
 
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import pab.ta.handler.base.asset.*;
+import pab.ta.handler.base.asset.CandleInterval;
+import pab.ta.handler.base.asset.Direction;
 import pab.ta.handler.base.component.rule.IndicatorGroup;
 import pab.ta.handler.base.task.Signal;
 import pab.ta.handler.base.task.SignalSelector;
@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+
 public class BaseSignalStore implements SignalStore {
 
     @Value("${signal.live-time-minutes:30}")
@@ -24,22 +24,7 @@ public class BaseSignalStore implements SignalStore {
     private final Set<Signal> cache = new HashSet<>();
 
     @Override
-    public boolean put(RuleIdentity ruleIdentity) {
-
-        AssetInfo info = ruleIdentity.seriesIdentity().info();
-        TimeFrame tf = ruleIdentity.seriesIdentity().tf();
-
-        Signal signal = BaseSignal.builder()
-                .ticker(info.getTicker())
-                .interval(tf.getInterval())
-                .direction(ruleIdentity.direction())
-                .ruleId(ruleIdentity.id())
-                .direction(ruleIdentity.direction())
-                .type(info.getType())
-                .ruleGroup(ruleIdentity.group())
-                .createdAt(LocalDateTime.now())
-                .build();
-
+    public boolean put(Signal signal) {
         //to update createdAt field of signal
         cache.remove(signal);
 
@@ -52,8 +37,8 @@ public class BaseSignalStore implements SignalStore {
         boolean isFirst = true;
 
         for (CandleInterval interval : filter.rules().keySet()) {
-            for (IndicatorGroup ruleGroup : filter.rules().get(interval)) {
-                Set<String> temp = filterSignalsBy(ruleGroup, interval, filter.direction());
+            for (IndicatorGroup group : filter.rules().get(interval)) {
+                Set<String> temp = filterSignalsBy(group, interval, filter.direction());
 
                 if (isFirst) {
                     isFirst = false;

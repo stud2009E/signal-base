@@ -1,9 +1,7 @@
 package pab.ta.handler.base.component.task;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import pab.ta.handler.base.asset.BaseTimeFrame;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.task.TaskHandler;
@@ -11,8 +9,6 @@ import pab.ta.handler.base.task.TaskStarter;
 
 import java.time.LocalDateTime;
 
-@Component
-@EnableScheduling
 @RequiredArgsConstructor
 public class BaseTaskStarter implements TaskStarter {
 

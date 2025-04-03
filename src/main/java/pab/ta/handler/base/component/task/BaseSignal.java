@@ -1,6 +1,9 @@
 package pab.ta.handler.base.component.task;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import pab.ta.handler.base.asset.AssetType;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.asset.Direction;
@@ -32,6 +35,7 @@ public class BaseSignal implements Signal {
     @EqualsAndHashCode.Include
     private Direction direction;
 
+    @EqualsAndHashCode.Include
     private IndicatorGroup indicatorGroup;
 
     private LocalDateTime createdAt;

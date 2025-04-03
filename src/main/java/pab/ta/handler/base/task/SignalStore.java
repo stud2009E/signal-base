@@ -1,7 +1,5 @@
 package pab.ta.handler.base.task;
 
-import pab.ta.handler.base.asset.RuleIdentity;
-
 import java.util.Set;
 
 public interface SignalStore {
@@ -9,10 +7,10 @@ public interface SignalStore {
     /**
      * save signals satisfied for rule
      *
-     * @param ruleIdentity rule identity
+     * @param signal rule identity
      * @return search new signal result
      */
-    boolean put(RuleIdentity ruleIdentity);
+    boolean put(Signal signal);
 
     /**
      * find tickers by direction, interval and rule group
