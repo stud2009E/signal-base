@@ -1,4 +1,4 @@
-package pab.ta.handler.base.component.rule;
+package pab.ta.handler.base.signal;
 
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Rule;
@@ -6,12 +6,11 @@ import org.ta4j.core.indicators.CCIIndicator;
 import org.ta4j.core.rules.UnderIndicatorRule;
 
 import static pab.ta.handler.base.asset.Direction.BUY;
-import static pab.ta.handler.base.component.rule.IndicatorGroup.CCI;
 
-public class CciBuySignalRule extends SignalRule {
+public class CciBuySignalProducer extends SignalProducer {
 
-    public CciBuySignalRule() {
-        super("CCI < -100", CCI, BUY);
+    public CciBuySignalProducer() {
+        super("CCI < -100", BUY);
     }
 
     @Override

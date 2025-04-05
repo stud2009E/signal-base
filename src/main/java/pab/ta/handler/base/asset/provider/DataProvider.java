@@ -1,4 +1,4 @@
-package pab.ta.handler.base.provider;
+package pab.ta.handler.base.asset.provider;
 
 import org.ta4j.core.BarSeries;
 import pab.ta.handler.base.asset.AssetInfo;

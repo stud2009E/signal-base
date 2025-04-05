@@ -1,4 +1,4 @@
-package pab.ta.handler.base.component.rule;
+package pab.ta.handler.base.signal;
 
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Rule;
@@ -6,12 +6,11 @@ import org.ta4j.core.indicators.volume.MoneyFlowIndexIndicator;
 import org.ta4j.core.rules.OverIndicatorRule;
 
 import static pab.ta.handler.base.asset.Direction.SELL;
-import static pab.ta.handler.base.component.rule.IndicatorGroup.MFI;
 
-public class MfiSellSignalRule extends SignalRule {
+public class MfiSellSignalProducer extends SignalProducer {
 
-    public MfiSellSignalRule() {
-        super("MFI > 80", MFI, SELL);
+    public MfiSellSignalProducer() {
+        super("MFI > 80", SELL);
     }
 
     @Override

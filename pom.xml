@@ -29,11 +29,6 @@
                 <artifactId>ta4j-core</artifactId>
                 <version>0.17</version>
             </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>33.3.0-jre</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -47,21 +42,9 @@
             <artifactId>ta4j-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

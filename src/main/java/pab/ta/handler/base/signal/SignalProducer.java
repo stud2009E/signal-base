@@ -1,4 +1,4 @@
-package pab.ta.handler.base.component.rule;
+package pab.ta.handler.base.signal;
 
 import lombok.Setter;
 import org.ta4j.core.BarSeries;
@@ -7,24 +7,22 @@ import pab.ta.handler.base.asset.AssetType;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.asset.Direction;
 import pab.ta.handler.base.asset.SeriesContainer;
-import pab.ta.handler.base.component.task.BaseSignal;
+import pab.ta.handler.base.task.BaseSignal;
 import pab.ta.handler.base.task.Signal;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class SignalRule {
+public abstract class SignalProducer {
 
     @Setter
     protected SeriesContainer container;
-    protected String indicatorName;
-    protected IndicatorGroup indicatorGroup;
+    protected String indicatorId;
     protected Direction direction;
 
-    public SignalRule(String indicatorName, IndicatorGroup indicatorGroup, Direction direction) {
-        this.indicatorName = indicatorName;
-        this.indicatorGroup = indicatorGroup;
+    public SignalProducer(String indicatorId, Direction direction) {
+        this.indicatorId = indicatorId;
         this.direction = direction;
     }
 
@@ -51,8 +49,7 @@ public abstract class SignalRule {
 
         if (rule.isSatisfied(index)) {
             signal = BaseSignal.builder()
-                    .indicatorName(indicatorName)
-                    .indicatorGroup(indicatorGroup)
+                    .indicatorId(indicatorId)
                     .ticker(ticker)
                     .interval(interval)
                     .direction(direction)

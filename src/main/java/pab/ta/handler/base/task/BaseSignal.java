@@ -1,4 +1,4 @@
-package pab.ta.handler.base.component.task;
+package pab.ta.handler.base.task;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -7,8 +7,6 @@ import lombok.ToString;
 import pab.ta.handler.base.asset.AssetType;
 import pab.ta.handler.base.asset.CandleInterval;
 import pab.ta.handler.base.asset.Direction;
-import pab.ta.handler.base.component.rule.IndicatorGroup;
-import pab.ta.handler.base.task.Signal;
 
 import java.time.LocalDateTime;
 
@@ -21,22 +19,18 @@ public class BaseSignal implements Signal {
     @ToString.Include
     private String ticker;
 
-    private AssetType type;
-
     @EqualsAndHashCode.Include
     @ToString.Include
     private CandleInterval interval;
 
     @ToString.Include
     @EqualsAndHashCode.Include
-    private String indicatorName;
+    private Direction direction;
 
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Direction direction;
+    private String indicatorId;
 
-    @EqualsAndHashCode.Include
-    private IndicatorGroup indicatorGroup;
-
+    private AssetType type;
     private LocalDateTime createdAt;
 }

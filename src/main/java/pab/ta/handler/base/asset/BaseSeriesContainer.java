@@ -3,7 +3,7 @@ package pab.ta.handler.base.asset;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ta4j.core.BarSeries;
-import pab.ta.handler.base.provider.DataProvider;
+import pab.ta.handler.base.asset.provider.DataProvider;
 
 @RequiredArgsConstructor
 @Getter

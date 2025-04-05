@@ -2,11 +2,15 @@ package pab.ta.handler.base.task;
 
 public interface TaskStarter {
 
-    void runTask2h();
+    void runTask1Hour();
 
-    void runTask4h();
+    void runTask2Hour();
 
-    void runTask1d();
+    void runTask4Hour();
 
-    void runTask1w();
+    void runTask1Day();
+
+    void runTask1Week();
+
+    void runTask1Month();
 }

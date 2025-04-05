@@ -1,4 +1,4 @@
-package pab.ta.handler.base.component.rule;
+package pab.ta.handler.base.signal;
 
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Rule;
@@ -7,12 +7,11 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.rules.OverIndicatorRule;
 
 import static pab.ta.handler.base.asset.Direction.SELL;
-import static pab.ta.handler.base.component.rule.IndicatorGroup.RSI;
 
-public class RsiSellSignalRule extends SignalRule {
+public class RsiSellSignalProducer extends SignalProducer {
 
-    public RsiSellSignalRule() {
-        super("RSI > 70", RSI, SELL);
+    public RsiSellSignalProducer() {
+        super("RSI > 70", SELL);
     }
 
     @Override

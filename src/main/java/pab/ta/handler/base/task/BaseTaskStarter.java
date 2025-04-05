@@ -1,11 +1,9 @@
-package pab.ta.handler.base.component.task;
+package pab.ta.handler.base.task;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import pab.ta.handler.base.asset.BaseTimeFrame;
 import pab.ta.handler.base.asset.CandleInterval;
-import pab.ta.handler.base.task.TaskHandler;
-import pab.ta.handler.base.task.TaskStarter;
 
 import java.time.LocalDateTime;
 
@@ -14,9 +12,18 @@ public class BaseTaskStarter implements TaskStarter {
 
     private final TaskHandler taskHandler;
 
+    @Scheduled(cron = "${cron.task.1H}")
     @Override
+    public void runTask1Hour() {
+        LocalDateTime to = LocalDateTime.now();
+        LocalDateTime from = to.minusWeeks(1);
+
+        taskHandler.process(new BaseTimeFrame(CandleInterval.HOUR_1, from, to));
+    }
+
     @Scheduled(cron = "${cron.task.2H}")
-    public void runTask2h() {
+    @Override
+    public void runTask2Hour() {
         LocalDateTime to = LocalDateTime.now();
         LocalDateTime from = to.minusWeeks(2);
 
@@ -24,7 +31,8 @@ public class BaseTaskStarter implements TaskStarter {
     }
 
     @Scheduled(cron = "${cron.task.4H}")
-    public void runTask4h() {
+    @Override
+    public void runTask4Hour() {
         LocalDateTime to = LocalDateTime.now();
         LocalDateTime from = to.minusWeeks(4);
 
@@ -32,7 +40,8 @@ public class BaseTaskStarter implements TaskStarter {
     }
 
     @Scheduled(cron = "${cron.task.1D}")
-    public void runTask1d() {
+    @Override
+    public void runTask1Day() {
         LocalDateTime to = LocalDateTime.now();
         LocalDateTime from = to.minusWeeks(8);
 
@@ -41,11 +50,21 @@ public class BaseTaskStarter implements TaskStarter {
 
 
     @Scheduled(cron = "${cron.task.1W}")
-    public void runTask1w() {
+    @Override
+    public void runTask1Week() {
         LocalDateTime to = LocalDateTime.now();
         LocalDateTime from = to.minusWeeks(50);
 
         taskHandler.process(new BaseTimeFrame(CandleInterval.WEEK, from, to));
+    }
+
+    @Scheduled(cron = "${cron.task.1M}")
+    @Override
+    public void runTask1Month() {
+        LocalDateTime to = LocalDateTime.now();
+        LocalDateTime from = to.minusWeeks(50);
+
+        taskHandler.process(new BaseTimeFrame(CandleInterval.MONTH, from, to));
     }
 
 }
