@@ -5,21 +5,26 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.3.2</version>
+        <version>3.3.3</version>
     </parent>
 
-    <groupId>pab.ta.handler</groupId>
+    <groupId>pab.ta.handler.base</groupId>
     <artifactId>signal-base</artifactId>
-    <version>0.0.1</version>
+    <version>${revision}</version>
 
-    <name>handler</name>
+    <name>signal-base</name>
+    <modules>
+        <module>signal-library</module>
+        <module>signal-base-boot-starter</module>
+    </modules>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <revision>0.0.1</revision>
     </properties>
 
     <dependencyManagement>

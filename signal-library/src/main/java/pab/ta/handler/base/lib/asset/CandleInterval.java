@@ -1,0 +1,10 @@
+package pab.ta.handler.base.lib.asset;
+
+public enum CandleInterval {
+    HOUR_1,
+    HOUR_2,
+    HOUR_4,
+    DAY,
+    WEEK,
+    MONTH
+}
