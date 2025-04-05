@@ -14,4 +14,12 @@
     <version>${revision}</version>
 
     <name>signal-boot</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>pab.ta.handler.base.lib</groupId>
+            <artifactId>signal-library</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 </project>

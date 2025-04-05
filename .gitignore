@@ -30,7 +30,10 @@ build/
 ### VS Code ###
 .vscode/
 
-
+.idea/**
 
 ### MAVEN ###
 .mvn/**
+
+
+**/.flattened-pom.xml
