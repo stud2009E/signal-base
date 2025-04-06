@@ -1,6 +1,5 @@
 package pab.ta.handler.base.lib.signal;
 
-import lombok.Setter;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Rule;
 import pab.ta.handler.base.lib.asset.AssetType;
@@ -16,8 +15,6 @@ import java.util.Optional;
 
 public abstract class SignalProducer {
 
-    @Setter
-    protected SeriesContainer container;
     protected String indicatorId;
     protected Direction direction;
 
@@ -26,15 +23,11 @@ public abstract class SignalProducer {
         this.direction = direction;
     }
 
-    public Optional<Signal> getSignal() {
-        if (Objects.isNull(container)) {
-            return Optional.empty();
-        }
-
-        return getSignal(container.getSeries().getEndIndex());
+    public Optional<Signal> getSignal(SeriesContainer container) {
+        return getSignal(container, container.getSeries().getEndIndex());
     }
 
-    public Optional<Signal> getSignal(int index) {
+    public Optional<Signal> getSignal(SeriesContainer container, int index) {
         if (Objects.isNull(container)) {
             return Optional.empty();
         }
@@ -48,12 +41,12 @@ public abstract class SignalProducer {
         Rule rule = getRule(container.getSeries());
 
         if (rule.isSatisfied(index)) {
-            signal = BaseSignal.builder()
-                    .indicatorId(indicatorId)
-                    .ticker(ticker)
-                    .interval(interval)
-                    .direction(direction)
-                    .createdAt(LocalDateTime.now())
+            signal = BaseSignal.builder().
+                    indicatorId(indicatorId).
+                    ticker(ticker).
+                    interval(interval).
+                    direction(direction).
+                    createdAt(LocalDateTime.now())
                     .type(type)
                     .build();
         }

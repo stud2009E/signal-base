@@ -24,8 +24,8 @@ public class BaseTaskHandler implements TaskHandler {
                 .map(assetInfo -> new BaseSeriesContainer(tf, assetInfo, provider))
                 .forEach(seriesContainer -> {
                     rules.forEach(rule -> {
-                        rule.setContainer(seriesContainer);
-                        rule.getSignal().ifPresent(signalStore::put);
+                        rule.getSignal(seriesContainer)
+                                .ifPresent(signalStore::put);
                     });
                 });
     }
