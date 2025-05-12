@@ -1,5 +1,7 @@
 package pab.ta.handler.base.lib.signal;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Rule;
 import pab.ta.handler.base.lib.asset.AssetType;
@@ -13,15 +15,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+@Getter
+@RequiredArgsConstructor
 public abstract class SignalProducer {
 
-    protected String indicatorId;
-    protected Direction direction;
-
-    public SignalProducer(String indicatorId, Direction direction) {
-        this.indicatorId = indicatorId;
-        this.direction = direction;
-    }
+    private final String indicatorId;
+    private final Direction direction;
 
     public Optional<Signal> getSignal(SeriesContainer container) {
         return getSignal(container, container.getSeries().getEndIndex());
