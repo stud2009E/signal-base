@@ -35,9 +35,9 @@ public class SignalBaseConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean({SignalStore.class, AssetInfoProvider.class, DataProvider.class, SignalProducer.class})
+    @ConditionalOnBean({Store.class, AssetInfoProvider.class, DataProvider.class, SignalProducer.class})
     @ConditionalOnMissingBean
-    public TaskHandler taskHandler(SignalStore signalStore, AssetInfoProvider assetInfoProvider,
+    public TaskHandler taskHandler(Store signalStore, AssetInfoProvider assetInfoProvider,
                                    DataProvider dataProvider, List<SignalProducer> producers) {
 
         return new BaseTaskHandler(signalStore, assetInfoProvider, dataProvider, producers);
@@ -45,7 +45,7 @@ public class SignalBaseConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SignalStore signalStore() {
-        return new BaseSignalStore(30L);
+    public Store signalStore() {
+        return new BaseSignalStore();
     }
 }
