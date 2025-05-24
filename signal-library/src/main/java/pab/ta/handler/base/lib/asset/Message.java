@@ -1,6 +1,7 @@
 package pab.ta.handler.base.lib.asset;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Represents a message with text content and timestamp information.
@@ -19,5 +20,5 @@ public interface Message {
      *
      * @return the creation timestamp as a {@link LocalDateTime} object
      */
-    LocalDateTime getCreatedAt();
+    ZonedDateTime getCreatedAt();
 }

@@ -1,11 +1,11 @@
 package pab.ta.handler.base.lib.asset;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public interface TimeFrame {
     CandleInterval getInterval();
 
-    LocalDateTime getFrom();
+    ZonedDateTime getFrom();
 
-    LocalDateTime getTo();
+    ZonedDateTime getTo();
 }

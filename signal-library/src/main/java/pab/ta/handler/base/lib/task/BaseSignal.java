@@ -8,7 +8,7 @@ import pab.ta.handler.base.lib.asset.AssetType;
 import pab.ta.handler.base.lib.asset.CandleInterval;
 import pab.ta.handler.base.lib.asset.Direction;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
@@ -32,5 +32,5 @@ public class BaseSignal implements Signal {
     private String indicatorId;
 
     private AssetType type;
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 }

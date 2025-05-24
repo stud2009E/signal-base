@@ -11,7 +11,7 @@ import pab.ta.handler.base.lib.asset.SeriesContainer;
 import pab.ta.handler.base.lib.task.BaseSignal;
 import pab.ta.handler.base.lib.task.Signal;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public abstract class SignalProducer {
                     ticker(ticker).
                     interval(interval).
                     direction(direction).
-                    createdAt(LocalDateTime.now())
+                    createdAt(ZonedDateTime.now())
                     .type(type)
                     .build();
         }

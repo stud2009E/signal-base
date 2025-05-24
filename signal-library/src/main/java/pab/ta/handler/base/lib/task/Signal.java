@@ -4,7 +4,7 @@ import pab.ta.handler.base.lib.asset.AssetType;
 import pab.ta.handler.base.lib.asset.CandleInterval;
 import pab.ta.handler.base.lib.asset.Direction;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public interface Signal {
 
@@ -18,5 +18,5 @@ public interface Signal {
 
     AssetType getType();
 
-    LocalDateTime getCreatedAt();
+    ZonedDateTime getCreatedAt();
 }
