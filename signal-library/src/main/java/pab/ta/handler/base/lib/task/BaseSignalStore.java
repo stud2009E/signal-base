@@ -1,6 +1,7 @@
 package pab.ta.handler.base.lib.task;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 @RequiredArgsConstructor
+@Slf4j
 public class BaseSignalStore implements Store {
 
     private final Set<Signal> cache = new HashSet<>();
@@ -16,6 +18,8 @@ public class BaseSignalStore implements Store {
     public void put(Signal signal) {
         //to update createdAt field of signal
         cache.remove(signal);
+
+        log.info("Put into store signal {}", signal.toString());
 
         cache.add(signal);
     }

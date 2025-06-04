@@ -18,6 +18,7 @@ public class BaseTaskHandler implements TaskHandler {
     private final List<SignalProducer> rules;
 
     public void process(TimeFrame tf) {
+
         assetInfoProvider
                 .info()
                 .stream()

@@ -1,6 +1,7 @@
 package pab.ta.handler.base.lib.task;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import pab.ta.handler.base.lib.asset.BaseTimeFrame;
 import pab.ta.handler.base.lib.asset.CandleInterval;
@@ -8,6 +9,7 @@ import pab.ta.handler.base.lib.asset.CandleInterval;
 import java.time.ZonedDateTime;
 
 @RequiredArgsConstructor
+@Slf4j
 public class BaseTaskStarter implements TaskStarter {
 
     private final TaskHandler taskHandler;
@@ -18,6 +20,8 @@ public class BaseTaskStarter implements TaskStarter {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(1);
 
+        log.info("Task starts with period {}", CandleInterval.HOUR_1);
+
         taskHandler.process(new BaseTimeFrame(CandleInterval.HOUR_1, from, to));
     }
 
@@ -26,6 +30,8 @@ public class BaseTaskStarter implements TaskStarter {
     public void runTask2Hour() {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(2);
+
+        log.info("Task starts with period {}", CandleInterval.HOUR_2);
 
         taskHandler.process(new BaseTimeFrame(CandleInterval.HOUR_2, from, to));
     }
@@ -36,6 +42,8 @@ public class BaseTaskStarter implements TaskStarter {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(4);
 
+        log.info("Task starts with period {}", CandleInterval.HOUR_4);
+
         taskHandler.process(new BaseTimeFrame(CandleInterval.HOUR_4, from, to));
     }
 
@@ -44,6 +52,8 @@ public class BaseTaskStarter implements TaskStarter {
     public void runTask1Day() {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(8);
+
+        log.info("Task starts with period {}", CandleInterval.DAY);
 
         taskHandler.process(new BaseTimeFrame(CandleInterval.DAY, from, to));
     }
@@ -55,7 +65,9 @@ public class BaseTaskStarter implements TaskStarter {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(50);
 
-        taskHandler.process(new BaseTimeFrame(CandleInterval.WEEK, from, to));
+        log.info("Task starts with period {}", CandleInterval.MONTH);
+
+        taskHandler.process(new BaseTimeFrame(CandleInterval.MONTH, from, to));
     }
 
     @Scheduled(cron = "${cron.task.1M}")
@@ -63,6 +75,8 @@ public class BaseTaskStarter implements TaskStarter {
     public void runTask1Month() {
         ZonedDateTime to = ZonedDateTime.now();
         ZonedDateTime from = to.minusWeeks(50);
+
+        log.info("Task starts with period {}", CandleInterval.MONTH);
 
         taskHandler.process(new BaseTimeFrame(CandleInterval.MONTH, from, to));
     }
