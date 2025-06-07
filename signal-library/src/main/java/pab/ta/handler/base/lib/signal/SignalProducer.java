@@ -27,7 +27,7 @@ public abstract class SignalProducer {
     }
 
     public Optional<Signal> getSignal(SeriesContainer container, int index) {
-        if (Objects.isNull(container)) {
+        if (Objects.isNull(container) || container.getSeries().isEmpty()) {
             return Optional.empty();
         }
 
