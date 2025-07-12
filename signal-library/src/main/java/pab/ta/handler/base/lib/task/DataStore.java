@@ -2,20 +2,20 @@ package pab.ta.handler.base.lib.task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import pab.ta.handler.base.lib.asset.AssetData;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Predicate;
 
 @RequiredArgsConstructor
 @Slf4j
-public class BaseSignalStore implements Store {
+public class DataStore implements IStore<AssetData> {
 
-    private final Set<Signal> cache = new HashSet<>();
+    private final Set<AssetData> cache = new HashSet<>();
 
     @Override
-    public void put(Signal signal) {
+    public void put(AssetData signal) {
         //to update createdAt field of signal
         cache.remove(signal);
 
@@ -29,15 +29,9 @@ public class BaseSignalStore implements Store {
         cache.clear();
     }
 
-
     @Override
-    public List<Signal> get() {
+    public List<AssetData> get() {
         return cache.stream().toList();
-    }
-
-    @Override
-    public List<Signal> get(Predicate<Signal> filter) {
-        return cache.stream().filter(filter).toList();
     }
 
 }

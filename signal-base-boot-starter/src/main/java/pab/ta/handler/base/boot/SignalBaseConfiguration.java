@@ -4,13 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pab.ta.handler.base.lib.asset.provider.AssetInfoProvider;
-import pab.ta.handler.base.lib.asset.provider.DataProvider;
-import pab.ta.handler.base.lib.signal.*;
+import pab.ta.handler.base.lib.asset.AssetData;
+import pab.ta.handler.base.lib.provider.AssetInfoProvider;
+import pab.ta.handler.base.lib.provider.DataProvider;
 import pab.ta.handler.base.lib.task.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @Slf4j
@@ -18,45 +15,29 @@ public class SignalBaseConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public List<SignalProducer> signalProducers() {
-
-        log.info("Bean 'signalProducers' created");
-
-        return Arrays.asList(
-                new CciBuySignalProducer(),
-                new CciSellSignalProducer(),
-                new RsiBuySignalProducer(),
-                new RsiSellSignalProducer(),
-                new MfiBuySignalProducer(),
-                new MfiSellSignalProducer()
-        );
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public TaskStarter taskStarter(TaskHandler taskHandler) {
+    public ITaskStarter taskStarter(ITaskHandler taskHandler, IStore<AssetData> store) {
 
         log.info("Bean 'taskStarter' created");
 
-        return new BaseTaskStarter(taskHandler);
+        return new TaskStarter(taskHandler, store);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public TaskHandler taskHandler(Store signalStore, AssetInfoProvider assetInfoProvider,
-                                   DataProvider dataProvider, List<SignalProducer> producers) {
+    public ITaskHandler taskHandler(IStore<AssetData> store, AssetInfoProvider assetInfoProvider,
+                                    DataProvider dataProvider) {
 
         log.info("Bean 'taskHandler' created");
 
-        return new BaseTaskHandler(signalStore, assetInfoProvider, dataProvider, producers);
+        return new TaskHandler(store, assetInfoProvider, dataProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public Store signalStore() {
+    public IStore<AssetData> store() {
 
         log.info("Bean 'signalStore' created");
 
-        return new BaseSignalStore();
+        return new DataStore();
     }
 }

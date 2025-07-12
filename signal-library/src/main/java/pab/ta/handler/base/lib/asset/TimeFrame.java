@@ -1,11 +1,16 @@
 package pab.ta.handler.base.lib.asset;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.time.ZonedDateTime;
 
-public interface TimeFrame {
-    CandleInterval getInterval();
+@RequiredArgsConstructor
+@Getter
+public class TimeFrame implements ITimeFrame {
+    private final CandleInterval interval;
 
-    ZonedDateTime getFrom();
+    private final ZonedDateTime from;
 
-    ZonedDateTime getTo();
+    private final ZonedDateTime to;
 }

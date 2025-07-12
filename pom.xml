@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <revision>0.0.3</revision>
+        <revision>0.0.5</revision>
     </properties>
 
     <dependencyManagement>
@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>org.ta4j</groupId>
                 <artifactId>ta4j-core</artifactId>
-                <version>0.17</version>
+                <version>0.18</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
