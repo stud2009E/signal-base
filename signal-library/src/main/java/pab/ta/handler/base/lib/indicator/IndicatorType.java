@@ -1,6 +1,6 @@
 package pab.ta.handler.base.lib.indicator;
 
-public enum SupportedIndicator {
+public enum IndicatorType {
 
     MA50,
     MA100,

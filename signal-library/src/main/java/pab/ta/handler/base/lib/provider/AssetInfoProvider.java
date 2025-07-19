@@ -1,6 +1,6 @@
 package pab.ta.handler.base.lib.provider;
 
-import pab.ta.handler.base.lib.asset.IAssetInfo;
+import pab.ta.handler.base.lib.asset.AssetInfo;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface AssetInfoProvider {
      *
      * @return List of asset information objects (never null)
      */
-    List<IAssetInfo> info();
+    List<AssetInfo> info();
 }

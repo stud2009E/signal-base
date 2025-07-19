@@ -1,8 +1,8 @@
 package pab.ta.handler.base.lib.provider;
 
 import org.ta4j.core.BarSeries;
-import pab.ta.handler.base.lib.asset.IAssetInfo;
-import pab.ta.handler.base.lib.asset.ITimeFrame;
+import pab.ta.handler.base.lib.asset.AssetInfo;
+import pab.ta.handler.base.lib.asset.TimeFrame;
 
 
 /**
@@ -17,5 +17,5 @@ public interface DataProvider {
      * @param tf   The time frame specifying both interval and date range
      * @return BarSeries containing the historical price data
      */
-    BarSeries getSeries(IAssetInfo info, ITimeFrame tf);
+    BarSeries getSeries(AssetInfo info, TimeFrame tf);
 }

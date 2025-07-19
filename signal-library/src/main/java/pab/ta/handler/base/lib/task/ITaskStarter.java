@@ -9,15 +9,5 @@ public interface ITaskStarter {
     /**
      * Executes a task designed to run every 4 hours
      */
-    void runTask4Hour();
-
-    /**
-     * Executes a task designed to run daily
-     */
-    void runTask1Day();
-
-    /**
-     * Executes cleanup/reset tasks
-     */
-    void runTaskClear();
+    void runTask();
 }

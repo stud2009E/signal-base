@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AssetInfo implements IAssetInfo {
+public class AssetInfo {
 
     private final String id;
 

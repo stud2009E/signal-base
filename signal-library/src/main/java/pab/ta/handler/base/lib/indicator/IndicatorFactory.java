@@ -21,7 +21,7 @@ public class IndicatorFactory {
      * @param series    data
      * @return instance
      */
-    public static AbstractIndicator<Num> getInstance(SupportedIndicator indicator, BarSeries series) {
+    public static AbstractIndicator<Num> getInstance(IndicatorType indicator, BarSeries series) {
         return switch (indicator) {
             case MA50 -> new SMAIndicator(new ClosePriceIndicator(series), 50);
             case MA100 -> new SMAIndicator(new ClosePriceIndicator(series), 100);

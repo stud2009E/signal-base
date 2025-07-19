@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 
 @RequiredArgsConstructor
 @Getter
-public class TimeFrame implements ITimeFrame {
+public class TimeFrame {
     private final CandleInterval interval;
 
     private final ZonedDateTime from;

@@ -1,22 +1,21 @@
 package pab.ta.handler.base.lib.task;
 
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import pab.ta.handler.base.lib.asset.AssetData;
+import pab.ta.handler.base.lib.signal.Signal;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
-public class DataStore implements IStore<AssetData, String> {
+@NoArgsConstructor
+public class SignalStore implements IStore<Signal, String> {
 
-    private final Set<AssetData> cache = new HashSet<>();
+    private final Set<Signal> cache = new HashSet<>();
 
     @Override
-    public void put(AssetData data) {
+    public void put(Signal data) {
         //to update createdAt field of signal
         cache.remove(data);
 
@@ -26,10 +25,10 @@ public class DataStore implements IStore<AssetData, String> {
     }
 
     @Override
-    public List<AssetData> get(String key) {
+    public List<Signal> get(String key) {
         return cache.stream()
-                .filter(assetData -> assetData.getInfo().getTicker().equals(key))
-                .collect(Collectors.toList());
+                .filter(signal -> signal.getTicker().equals(key))
+                .toList();
     }
 
     @Override
@@ -38,8 +37,7 @@ public class DataStore implements IStore<AssetData, String> {
     }
 
     @Override
-    public List<AssetData> getAll() {
+    public List<Signal> getAll() {
         return cache.stream().toList();
     }
-
 }

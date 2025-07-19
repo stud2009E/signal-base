@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <T> the type of elements stored in this collection
  */
-public interface IStore<T> {
+public interface IStore<T, K> {
 
     /**
      * Adds an item to the store
@@ -16,6 +16,14 @@ public interface IStore<T> {
      * @param data the item to store
      */
     void put(T data);
+
+    /**
+     * Get stored data by key
+     *
+     * @param key key
+     * @return items
+     */
+    List<T> get(K key);
 
     /**
      * Removes all items from the store
@@ -27,5 +35,5 @@ public interface IStore<T> {
      *
      * @return an immutable list of stored items
      */
-    List<T> get();
+    List<T> getAll();
 }

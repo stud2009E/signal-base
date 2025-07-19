@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pab.ta.handler.base.lib.asset.AssetData;
 import pab.ta.handler.base.lib.provider.AssetInfoProvider;
 import pab.ta.handler.base.lib.provider.DataProvider;
 import pab.ta.handler.base.lib.task.*;
@@ -15,29 +14,34 @@ public class SignalBaseConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ITaskStarter taskStarter(ITaskHandler taskHandler, IStore<AssetData> store) {
-
+    public ITaskStarter taskStarter(IDataTaskHandler dataTaskHandler, ISignalTaskHandler signalTaskHandler) {
         log.info("Bean 'taskStarter' created");
 
-        return new TaskStarter(taskHandler, store);
+        return new TaskStarter(dataTaskHandler, signalTaskHandler);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public ITaskHandler taskHandler(IStore<AssetData> store, AssetInfoProvider assetInfoProvider,
-                                    DataProvider dataProvider) {
-
+    public DataTaskHandler taskHandler(DataStore store, AssetInfoProvider assetInfoProvider,
+                                       DataProvider dataProvider) {
         log.info("Bean 'taskHandler' created");
 
-        return new TaskHandler(store, assetInfoProvider, dataProvider);
+        return new DataTaskHandler(store, assetInfoProvider, dataProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public IStore<AssetData> store() {
-
-        log.info("Bean 'signalStore' created");
+    public DataStore dataStore() {
+        log.info("Bean 'dataStore' created");
 
         return new DataStore();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SignalStore signalStore() {
+        log.info("Bean 'signalStore' created");
+
+        return new SignalStore();
     }
 }
