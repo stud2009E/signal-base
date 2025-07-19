@@ -9,7 +9,6 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.num.Num;
 import pab.ta.handler.base.lib.asset.AssetData;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 public abstract class AbstractSignalProducer {
@@ -23,7 +22,7 @@ public abstract class AbstractSignalProducer {
                 .setName(ruleWrapper.getName())
                 .setInterval(assetData.getInterval())
                 .setTicker(assetData.getInfo().getTicker())
-                .setCreatedAt(ZonedDateTime.now());
+                .setCreatedAt(assetData.getCreatedAt());
     }
 
     @NoArgsConstructor

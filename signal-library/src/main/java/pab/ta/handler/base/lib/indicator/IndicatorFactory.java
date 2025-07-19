@@ -1,5 +1,7 @@
 package pab.ta.handler.base.lib.indicator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.*;
 import org.ta4j.core.indicators.adx.ADXIndicator;
@@ -12,6 +14,7 @@ import org.ta4j.core.num.Num;
 /**
  * Indicator factory.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IndicatorFactory {
 
     /**
