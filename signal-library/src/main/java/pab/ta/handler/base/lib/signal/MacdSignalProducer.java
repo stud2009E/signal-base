@@ -1,6 +1,5 @@
 package pab.ta.handler.base.lib.signal;
 
-import lombok.NoArgsConstructor;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.indicators.MACDIndicator;
 import org.ta4j.core.num.Num;
@@ -11,10 +10,16 @@ import pab.ta.handler.base.lib.asset.AssetData;
 import java.util.LinkedList;
 import java.util.List;
 
+import static pab.ta.handler.base.lib.asset.Direction.BUY;
+import static pab.ta.handler.base.lib.asset.Direction.SELL;
 import static pab.ta.handler.base.lib.indicator.IndicatorType.MACD;
 
-@NoArgsConstructor
+
 public class MacdSignalProducer extends AbstractSignalProducer {
+
+    public MacdSignalProducer() {
+        super(MACD);
+    }
 
     public List<Signal> getSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
@@ -39,9 +44,13 @@ public class MacdSignalProducer extends AbstractSignalProducer {
 
         return List.of(
                 new RuleWrapper()
+                        .setType(getType())
+                        .setDirection(BUY)
                         .setRule(new CrossedUpIndicatorRule(macd, 0))
                         .setName("MACD <> 0"),
                 new RuleWrapper()
+                        .setType(getType())
+                        .setDirection(SELL)
                         .setRule(new CrossedDownIndicatorRule(macd, 0))
                         .setName("MACD >< 0")
         );

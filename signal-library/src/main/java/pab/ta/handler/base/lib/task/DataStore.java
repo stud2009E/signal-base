@@ -20,7 +20,7 @@ public class DataStore implements IStore<AssetData, String> {
         //to update createdAt field of signal
         cache.remove(data);
 
-        log.info("Put into store signal {}", data.toString());
+        log.info("Save data {}, {}", data.getInfo().getTicker(), data.getInterval().name());
 
         cache.add(data);
     }
