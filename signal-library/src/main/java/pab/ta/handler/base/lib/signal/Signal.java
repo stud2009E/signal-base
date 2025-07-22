@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import pab.ta.handler.base.lib.asset.CandleInterval;
+import pab.ta.handler.base.lib.asset.Direction;
+import pab.ta.handler.base.lib.indicator.IndicatorType;
 
 import java.time.ZonedDateTime;
 
@@ -23,6 +25,10 @@ public class Signal {
 
     @EqualsAndHashCode.Include
     private CandleInterval interval;
+
+    private IndicatorType type;
+
+    private Direction direction;
 
     private ZonedDateTime createdAt;
 }
