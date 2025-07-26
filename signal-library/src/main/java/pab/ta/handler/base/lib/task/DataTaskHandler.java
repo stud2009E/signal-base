@@ -28,7 +28,7 @@ public class DataTaskHandler implements IDataTaskHandler {
 
             return;
         }
-        log.info("Task start: period {}", timeFrame);
+        log.info("Task start: period {}", timeFrame.getInterval().name());
 
         infoProvider
                 .info()
@@ -40,7 +40,13 @@ public class DataTaskHandler implements IDataTaskHandler {
                             .build();
 
                     for (var name : IndicatorType.values()) {
-                        var indicator = IndicatorFactory.getInstance(name, dataProvider.getSeries(assetInfo, timeFrame));
+                        var series = dataProvider.getSeries(assetInfo, timeFrame);
+
+                        if (series.isEmpty()) {
+                            continue;
+                        }
+
+                        var indicator = IndicatorFactory.getInstance(name, series);
 
                         if (indicator.isStable()) {
                             assetData.putIndicator(name, indicator);

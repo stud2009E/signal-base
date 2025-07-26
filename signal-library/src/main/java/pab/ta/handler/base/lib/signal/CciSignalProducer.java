@@ -22,11 +22,11 @@ public class CciSignalProducer extends AbstractSignalProducer {
         super(CCI14);
     }
 
-    public List<Signal> getSignals(List<AssetData> assetDataList) {
+    @Override
+    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(CCI14))
+        assetDataList
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(CCI14);
                     var index = indicator.getBarSeries().getEndIndex();
@@ -40,25 +40,32 @@ public class CciSignalProducer extends AbstractSignalProducer {
         return signals;
     }
 
+    @Override
+    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
+        return assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(CCI14))
+                .toList();
+    }
+
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {
         return List.of(
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(CCI14)
                         .setDirection(SELL)
                         .setRule(new OverIndicatorRule(indicator, 100))
                         .setName("CCI > 100"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(CCI14)
                         .setDirection(BUY)
                         .setRule(new UnderIndicatorRule(indicator, -100))
                         .setName("CCI < -100"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(CCI14)
                         .setDirection(SELL)
                         .setRule(new CrossedUpIndicatorRule(indicator, 100))
                         .setName("CCI <> 100"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(CCI14)
                         .setDirection(SELL)
                         .setRule(new CrossedDownIndicatorRule(indicator, -100))
                         .setName("CCI >< -100")

@@ -3,6 +3,7 @@ package pab.ta.handler.base.lib.asset;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.num.Num;
 import pab.ta.handler.base.lib.indicator.IndicatorType;
