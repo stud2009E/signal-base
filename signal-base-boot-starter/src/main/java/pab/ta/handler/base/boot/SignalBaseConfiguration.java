@@ -60,10 +60,14 @@ public class SignalBaseConfiguration {
     public List<AbstractSignalProducer> signalProducers() {
         log.info("Bean 'signalProducers' is created");
 
-        return List.of(new RsiSignalProducer(),
+        return List.of(
+                new RsiSignalProducer(),
                 new MfiSignalProducer(),
                 new CciSignalProducer(),
                 new MacdSignalProducer(),
-                new AdxSignalProducer());
+                new AdxSignalProducer(),
+                new BBLowSignalProducer(),
+                new BBUpSignalProducer()
+        );
     }
 }

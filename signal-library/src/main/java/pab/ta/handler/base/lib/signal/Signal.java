@@ -10,6 +10,10 @@ import pab.ta.handler.base.lib.asset.Direction;
 import pab.ta.handler.base.lib.indicator.IndicatorType;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Setter
@@ -26,9 +30,31 @@ public class Signal {
     @EqualsAndHashCode.Include
     private CandleInterval interval;
 
-    private IndicatorType type;
+    private Set<IndicatorType> types = new HashSet<>();
 
     private Direction direction;
 
     private ZonedDateTime createdAt;
+
+
+    public Signal(String name, String ticker, CandleInterval interval, Direction direction, ZonedDateTime createdAt, IndicatorType... types) {
+        this.name = name;
+        this.ticker = ticker;
+        this.interval = interval;
+        this.direction = direction;
+        this.createdAt = createdAt;
+        this.types.addAll(List.of(types));
+    }
+
+    public Signal addType(Collection<IndicatorType> types) {
+        this.types.addAll(types);
+
+        return this;
+    }
+
+    public Signal addType(IndicatorType... types) {
+        this.types.addAll(List.of(types));
+
+        return this;
+    }
 }
