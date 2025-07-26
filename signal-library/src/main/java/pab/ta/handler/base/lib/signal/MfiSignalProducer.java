@@ -21,16 +21,16 @@ public class MfiSignalProducer extends AbstractSignalProducer {
         super(MFI14);
     }
 
-    public List<Signal> getSignals(List<AssetData> assetDataList) {
+    @Override
+    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(MFI14))
+        assetDataList
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(MFI14);
                     var index = indicator.getBarSeries().getEndIndex();
 
-                    rules(assetData.getIndicator(MFI14))
+                    rules(indicator)
                             .stream()
                             .filter(ruleWrapper -> ruleWrapper.getRule().isSatisfied(index))
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
@@ -39,25 +39,32 @@ public class MfiSignalProducer extends AbstractSignalProducer {
         return signals;
     }
 
+    @Override
+    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
+        return assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(MFI14))
+                .toList();
+    }
+
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {
         return List.of(
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MFI14)
                         .setDirection(SELL)
                         .setRule(new OverIndicatorRule(indicator, 80))
                         .setName("MFI > 80"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MFI14)
                         .setDirection(BUY)
                         .setRule(new UnderIndicatorRule(indicator, 20))
                         .setName("MFI < 20"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MFI14)
                         .setDirection(BUY)
                         .setRule(new CrossedUpIndicatorRule(indicator, 20))
                         .setName("MFI <> 20"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MFI14)
                         .setDirection(SELL)
                         .setRule(new CrossedDownIndicatorRule(indicator, 80))
                         .setName("MFI >< 80")

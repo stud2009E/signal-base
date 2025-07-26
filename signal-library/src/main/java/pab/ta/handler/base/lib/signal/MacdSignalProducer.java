@@ -21,11 +21,11 @@ public class MacdSignalProducer extends AbstractSignalProducer {
         super(MACD);
     }
 
-    public List<Signal> getSignals(List<AssetData> assetDataList) {
+    @Override
+    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(MACD))
+        assetDataList
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(MACD);
                     var index = indicator.getBarSeries().getEndIndex();
@@ -39,17 +39,24 @@ public class MacdSignalProducer extends AbstractSignalProducer {
         return signals;
     }
 
+    @Override
+    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
+        return assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(MACD))
+                .toList();
+    }
+
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {
         MACDIndicator macd = (MACDIndicator) indicator;
 
         return List.of(
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MACD)
                         .setDirection(BUY)
                         .setRule(new CrossedUpIndicatorRule(macd, 0))
                         .setName("MACD <> 0"),
                 new RuleWrapper()
-                        .setType(getType())
+                        .addType(MACD)
                         .setDirection(SELL)
                         .setRule(new CrossedDownIndicatorRule(macd, 0))
                         .setName("MACD >< 0")
