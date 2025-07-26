@@ -4,6 +4,7 @@ import org.ta4j.core.Indicator;
 import org.ta4j.core.indicators.numeric.NumericIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedDownIndicatorRule;
+import org.ta4j.core.rules.CrossedUpIndicatorRule;
 import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.lib.asset.AssetData;
 
@@ -55,6 +56,11 @@ public class BBLowSignalProducer extends AbstractSignalProducer {
                         .setDirection(BUY)
                         .setRule(new CrossedDownIndicatorRule(closePrice, indicator))
                         .setName("BB_LOW <> price")
+                        .addType(BB_LOW),
+                new RuleWrapper()
+                        .setDirection(BUY)
+                        .setRule(new CrossedUpIndicatorRule(closePrice, indicator))
+                        .setName("BB_LOW >< price")
                         .addType(BB_LOW)
         );
     }
