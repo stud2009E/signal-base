@@ -20,6 +20,7 @@ public enum IndicatorType {
     ADX_PLUS14("adx plus 14"),
 
     MACD("moving average convergence divergence 12,26 and 9"),
+    DVG_MACD("macd divergence"),
 
     VWAP("volume-weighted average price"),
 

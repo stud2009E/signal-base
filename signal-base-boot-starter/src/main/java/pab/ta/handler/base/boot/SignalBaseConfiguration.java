@@ -65,6 +65,7 @@ public class SignalBaseConfiguration {
                 new MfiSignalProducer(),
                 new CciSignalProducer(),
                 new MacdSignalProducer(),
+                new DvgMacdSignalProducer(),
                 new AdxSignalProducer(),
                 new BBLowSignalProducer(),
                 new BBUpSignalProducer()

@@ -53,7 +53,8 @@ public class IndicatorFactory {
             case ADX_MINUS14 -> new MinusDIIndicator(series, 14);
             case ADX_PLUS14 -> new PlusDIIndicator(series, 14);
 
-            case MACD -> new MACDIndicator(closePrice);
+            case DVG_MACD, MACD -> new MACDIndicator(closePrice);
+
             case VWAP -> new VWAPIndicator(series, 14);
 
             case BB_LOW -> new BollingerBandsLowerIndicator(
