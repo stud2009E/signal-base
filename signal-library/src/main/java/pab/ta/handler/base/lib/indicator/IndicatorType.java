@@ -14,9 +14,13 @@ public enum IndicatorType {
     CCI14("commodity channel index 14"),
 
     ATR14("average true range 14"),
+
     ADX14("average directional index 14"),
+    ADX_MINUS14("adx minus 14"),
+    ADX_PLUS14("adx plus 14"),
 
     MACD("moving average convergence divergence 12,26 and 9"),
+    DVG_MACD("macd divergence"),
 
     VWAP("volume-weighted average price"),
 

@@ -9,6 +9,8 @@ import org.ta4j.core.indicators.CCIIndicator;
 import org.ta4j.core.indicators.MACDIndicator;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.adx.ADXIndicator;
+import org.ta4j.core.indicators.adx.MinusDIIndicator;
+import org.ta4j.core.indicators.adx.PlusDIIndicator;
 import org.ta4j.core.indicators.averages.SMAIndicator;
 import org.ta4j.core.indicators.bollinger.BollingerBandsLowerIndicator;
 import org.ta4j.core.indicators.bollinger.BollingerBandsMiddleIndicator;
@@ -40,13 +42,21 @@ public class IndicatorFactory {
             case MA50 -> new SMAIndicator(closePrice, 50);
             case MA100 -> new SMAIndicator(closePrice, 100);
             case MA200 -> new SMAIndicator(closePrice, 200);
+
             case RSI14 -> new RSIIndicator(closePrice, 14);
             case MFI14 -> new MoneyFlowIndexIndicator(series, 14);
             case CCI14 -> new CCIIndicator(series, 14);
+
             case ATR14 -> new ATRIndicator(series, 14);
+
             case ADX14 -> new ADXIndicator(series, 14);
-            case MACD -> new MACDIndicator(closePrice);
+            case ADX_MINUS14 -> new MinusDIIndicator(series, 14);
+            case ADX_PLUS14 -> new PlusDIIndicator(series, 14);
+
+            case DVG_MACD, MACD -> new MACDIndicator(closePrice);
+
             case VWAP -> new VWAPIndicator(series, 14);
+
             case BB_LOW -> new BollingerBandsLowerIndicator(
                     new BollingerBandsMiddleIndicator(
                             numericClosePrice.sma(20)), numericClosePrice.stddev(20));
