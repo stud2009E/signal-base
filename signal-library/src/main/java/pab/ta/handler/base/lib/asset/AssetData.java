@@ -3,7 +3,6 @@ package pab.ta.handler.base.lib.asset;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.num.Num;
 import pab.ta.handler.base.lib.indicator.IndicatorType;
@@ -18,7 +17,7 @@ import java.util.Map;
 public class AssetData {
     private final AssetInfo info;
 
-    private final CandleInterval interval;
+    private final TimeFrame timeFrame;
 
     private final ZonedDateTime createdAt;
 
@@ -37,24 +36,35 @@ public class AssetData {
     }
 
     public boolean hasInterval(CandleInterval other) {
-        return this.interval.equals(other);
+        return getInterval().equals(other);
+    }
+
+    public CandleInterval getInterval() {
+        return timeFrame.getInterval();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         AssetData assetData = (AssetData) o;
 
-        if (!info.equals(assetData.info)) return false;
-        return interval == assetData.interval;
+        if (!info.equals(assetData.info)) {
+            return false;
+        }
+
+        return getInterval() == assetData.getInterval();
     }
 
     @Override
     public int hashCode() {
         int result = info.getTicker().hashCode();
-        result = 31 * result + interval.hashCode();
+        result = 31 * result + getInterval().hashCode();
         return result;
     }
 }
