@@ -67,4 +67,6 @@ public class AssetData {
         result = 31 * result + getInterval().hashCode();
         return result;
     }
+
+
 }
