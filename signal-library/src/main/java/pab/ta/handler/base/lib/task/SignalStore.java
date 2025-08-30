@@ -19,7 +19,7 @@ public class SignalStore implements IStore<Signal, String> {
         //to update createdAt field of signal
         cache.remove(data);
 
-        log.info("Signal {}, {}, {}, {}", data.getName(), data.getDirection().name(), data.getTicker(),
+        log.info("Signal {}, {}, {}, {}", data.getTicker(), data.getName(), data.getDirection().name(),
                 data.getInterval().name());
 
         cache.add(data);
