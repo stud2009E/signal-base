@@ -23,17 +23,11 @@ public class TaskStarter implements ITaskStarter {
     @Scheduled(fixedDelayString = "${task.delay.seconds}", timeUnit = TimeUnit.SECONDS)
     @Override
     public void runTask() {
-        ZonedDateTime to = ZonedDateTime.now();
-
-        var timeframes = List.of(
-                new TimeFrame(CandleInterval.H1, to.minusWeeks(1), to),
-                new TimeFrame(CandleInterval.H4, to.minusWeeks(4), to),
-                new TimeFrame(CandleInterval.DAY, to.minusWeeks(8), to));
 
         infoProvider
                 .info()
                 .forEach(assetInfo -> {
-                    for (var timeFrame : timeframes) {
+                    for (var timeFrame : getTimeframes()) {
                         var assetData = AssetData.builder()
                                 .info(assetInfo)
                                 .timeFrame(timeFrame)
@@ -45,6 +39,14 @@ public class TaskStarter implements ITaskStarter {
 
                     signalHandler.process(assetInfo);
                 });
+    }
 
+    private List<TimeFrame> getTimeframes() {
+        var to = ZonedDateTime.now();
+
+        return List.of(
+                new TimeFrame(CandleInterval.H1, to.minusWeeks(1), to),
+                new TimeFrame(CandleInterval.H4, to.minusWeeks(4), to),
+                new TimeFrame(CandleInterval.DAY, to.minusWeeks(8), to));
     }
 }
