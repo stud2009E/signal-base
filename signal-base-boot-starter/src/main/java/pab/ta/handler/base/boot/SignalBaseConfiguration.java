@@ -17,26 +17,26 @@ public class SignalBaseConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ITaskStarter taskStarter(IDataTaskHandler dataTaskHandler, ISignalTaskHandler signalTaskHandler) {
+    public ITaskStarter taskStarter(IDataHandler dataHandler, ISignalHandler signalHandler, AssetInfoProvider infoProvider) {
         log.info("Bean 'taskStarter' created");
 
-        return new TaskStarter(dataTaskHandler, signalTaskHandler);
+        return new TaskStarter(dataHandler, signalHandler, infoProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public DataTaskHandler dataTaskHandler(DataStore store, AssetInfoProvider assetInfoProvider, DataProvider dataProvider) {
+    public DataHandler dataTaskHandler(DataStore store, DataProvider dataProvider) {
         log.info("Bean 'dataTaskHandler' is created");
 
-        return new DataTaskHandler(store, assetInfoProvider, dataProvider);
+        return new DataHandler(store, dataProvider);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SignalTaskHandler signalTaskHandler(DataStore dataStore, SignalStore signalStore) {
+    public SignalHandler signalTaskHandler(DataStore dataStore, SignalStore signalStore) {
         log.info("Bean 'signalTaskHandler' is created");
 
-        return new SignalTaskHandler(dataStore, signalStore, signalProducers());
+        return new SignalHandler(dataStore, signalStore, signalProducers());
     }
 
     @Bean

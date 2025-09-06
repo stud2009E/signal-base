@@ -7,7 +7,6 @@ import pab.ta.handler.base.lib.asset.AssetData;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +28,7 @@ public class DataStore implements IStore<AssetData, String> {
     public List<AssetData> get(String key) {
         return cache.stream()
                 .filter(assetData -> assetData.getInfo().getTicker().equals(key))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
