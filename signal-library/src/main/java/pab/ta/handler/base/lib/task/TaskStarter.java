@@ -46,6 +46,7 @@ public class TaskStarter implements ITaskStarter {
 
         return List.of(
                 new TimeFrame(CandleInterval.H1, to.minusWeeks(1), to),
+                new TimeFrame(CandleInterval.H2, to.minusWeeks(2), to),
                 new TimeFrame(CandleInterval.H4, to.minusWeeks(4), to),
                 new TimeFrame(CandleInterval.DAY, to.minusWeeks(8), to));
     }
