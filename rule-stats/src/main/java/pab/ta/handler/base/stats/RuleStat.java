@@ -33,18 +33,26 @@ public class RuleStat {
             return;
         }
 
-        var isBullish = isBullish(series.getBar(signalIndex), series.getBar(signalIndex + next));
+        var signalBar = series.getBar(signalIndex);
+        var nextBar = series.getBar(signalIndex + next);
+
+        var isBullish = isBullish(signalBar, nextBar);
+        var isBearish = isBearish(signalBar, nextBar);
 
         if (direction == Direction.BUY && isBullish) {
             bullCount++;
         }
 
-        if (direction == Direction.SELL && !isBullish) {
+        if (direction == Direction.SELL && isBearish) {
             bearCount++;
         }
     }
 
     private boolean isBullish(Bar bar, Bar nextBar) {
         return bar.getClosePrice().longValue() < nextBar.getHighPrice().longValue();
+    }
+
+    private boolean isBearish(Bar bar, Bar nextBar) {
+        return bar.getClosePrice().longValue() > nextBar.getLowPrice().longValue();
     }
 }
