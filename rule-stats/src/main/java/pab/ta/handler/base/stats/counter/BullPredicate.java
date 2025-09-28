@@ -12,7 +12,7 @@ public class BullPredicate extends BarPredicate {
     }
 
     @Override
-    protected boolean compareBars(Bar signalBar, Bar testBar) {
-        return signalBar.getClosePrice().longValue() < testBar.getHighPrice().longValue();
+    protected boolean compareBars(Bar signalBar, Bar offsetBar) {
+        return signalBar.getClosePrice().longValue() < offsetBar.getHighPrice().longValue();
     }
 }

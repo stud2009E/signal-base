@@ -18,16 +18,16 @@ public abstract class BarPredicate implements Predicate<Integer> {
     }
 
     @Override
-    public boolean test(Integer testIndex) {
+    public boolean test(Integer offset) {
         try {
             var signalBar = series.getBar(signalIndex);
-            var testBar = series.getBar(signalIndex + testIndex);
+            var offsetBar = series.getBar(signalIndex + offset);
 
-            return compareBars(signalBar, testBar);
+            return compareBars(signalBar, offsetBar);
         } catch (IndexOutOfBoundsException ex) {
             return false;
         }
     }
 
-    protected abstract boolean compareBars(Bar signalBar, Bar testBar);
+    protected abstract boolean compareBars(Bar signalBar, Bar offsetBar);
 }

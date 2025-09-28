@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 @Getter
 @Accessors(chain = true)
 public class StatsCounter {
-    private final Integer next;
+    private final Integer offset;
 
     @Setter
     private Predicate<Integer> predicate;
@@ -17,8 +17,8 @@ public class StatsCounter {
     private Integer count = 0;
     private Integer totalCount = 0;
 
-    public StatsCounter(Integer next) {
-        this.next = next;
+    public StatsCounter(Integer offset) {
+        this.offset = offset;
         predicate = i -> false;
     }
 

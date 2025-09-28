@@ -20,10 +20,10 @@ public class RuleStatsCollector {
         this(rule, List.of(1, 2, 3, 5));
     }
 
-    public RuleStatsCollector(BaseRule rule, List<Integer> testIndexes) {
+    public RuleStatsCollector(BaseRule rule, List<Integer> offsets) {
         this.rule = rule;
 
-        counters = testIndexes
+        counters = offsets
                 .stream()
                 .map(StatsCounter::new)
                 .toList();
