@@ -16,6 +16,7 @@
     <modules>
         <module>signal-library</module>
         <module>signal-base-boot-starter</module>
+        <module>rule-stats</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -29,6 +30,21 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>pab.ta.handler.base.lib</groupId>
+                <artifactId>signal-library</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>pab.ta.handler.base.boot</groupId>
+                <artifactId>signal-library</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>pab.ta.handler.base.stats</groupId>
+                <artifactId>signal-bas</artifactId>
+                <version>${revision}</version>
+            </dependency>
             <dependency>
                 <groupId>org.ta4j</groupId>
                 <artifactId>ta4j-core</artifactId>
