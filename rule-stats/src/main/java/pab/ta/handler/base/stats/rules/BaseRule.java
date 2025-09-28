@@ -1,4 +1,4 @@
-package pab.ta.handler.base.stats;
+package pab.ta.handler.base.stats.rules;
 
 import lombok.Getter;
 import org.ta4j.core.BarSeries;
