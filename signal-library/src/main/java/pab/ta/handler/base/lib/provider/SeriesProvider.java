@@ -8,7 +8,7 @@ import pab.ta.handler.base.lib.asset.TimeFrame;
 /**
  * Provides access to historical market data for specified assets and time ranges.
  */
-public interface DataProvider {
+public interface SeriesProvider {
 
     /**
      * Retrieves a time series of market data (candles/bars) for the given asset and time frame.

@@ -7,7 +7,7 @@ package pab.ta.handler.base.lib.task;
 public interface ITaskStarter {
 
     /**
-     * Executes a task designed to run every 4 hours
+     * Executes a task.
      */
     void runTask();
 }
