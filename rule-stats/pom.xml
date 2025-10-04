@@ -9,7 +9,6 @@
 
     <groupId>pab.ta.handler.base.stats</groupId>
     <artifactId>rule-stats</artifactId>
-    <packaging>jar</packaging>
 
     <name>rule-stats</name>
 
@@ -21,6 +20,11 @@
         <dependency>
             <groupId>pab.ta.handler.base.lib</groupId>
             <artifactId>signal-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -6,7 +6,7 @@ import org.ta4j.core.Rule;
 import pab.ta.handler.base.lib.asset.Direction;
 
 @Getter
-public abstract class BaseRule implements Rule{
+public abstract class BaseRule implements Rule {
 
     private final String name;
     private final Direction direction;
