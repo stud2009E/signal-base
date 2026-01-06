@@ -51,7 +51,7 @@ public class AdxSignalProducer extends AbstractSignalProducer {
     protected List<RuleWrapper> rules(Indicator<Num> adx, Indicator<Num> adxPlus, Indicator<Num> adxMinus) {
         return List.of(
                 new RuleWrapper()
-                        .addType(getTypes())
+                        .addType(getIndicatorTypes())
                         .setDirection(BUY)
                         .setRule(
                                 new OverIndicatorRule(adx, 20)
@@ -60,7 +60,7 @@ public class AdxSignalProducer extends AbstractSignalProducer {
                         .setName("ADX > 20 | D+ <> D-"),
 
                 new RuleWrapper()
-                        .addType(getTypes())
+                        .addType(getIndicatorTypes())
                         .setDirection(SELL)
                         .setRule(
                                 new OverIndicatorRule(adx, 20)
@@ -69,14 +69,14 @@ public class AdxSignalProducer extends AbstractSignalProducer {
                         .setName("ADX > 20 | D+ >< D-"),
 
                 new RuleWrapper()
-                        .addType(getTypes())
+                        .addType(getIndicatorTypes())
                         .setDirection(BUY)
                         .setRule(
                                 new OverIndicatorRule(adx, 25)
                                         .and(new OverIndicatorRule(adxPlus, adxMinus)))
                         .setName("ADX > 25 | D+ > D-"),
                 new RuleWrapper()
-                        .addType(getTypes())
+                        .addType(getIndicatorTypes())
                         .setDirection(SELL)
                         .setRule(
                                 new OverIndicatorRule(adx, 25)

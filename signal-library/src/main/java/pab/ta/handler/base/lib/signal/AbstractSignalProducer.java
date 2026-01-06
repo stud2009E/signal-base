@@ -16,14 +16,15 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-public abstract class AbstractSignalProducer {
+public abstract class AbstractSignalProducer implements SignalProducer {
 
-    private final Set<IndicatorType> types = new HashSet<>();
+    private final Set<IndicatorType> indicatorTypes = new HashSet<>();
 
-    public AbstractSignalProducer(IndicatorType... types) {
-        this.types.addAll(List.of(types));
+    public AbstractSignalProducer(IndicatorType... indicatorTypes) {
+        this.indicatorTypes.addAll(List.of(indicatorTypes));
     }
 
+    @Override
     public List<Signal> getSignals(List<AssetData> assetDataList) {
         var checkedData = filterDataForSignal(assetDataList);
 
@@ -34,7 +35,7 @@ public abstract class AbstractSignalProducer {
         return produceSignals(checkedData);
     }
 
-    public Signal getSignal(RuleWrapper ruleWrapper, AssetData assetData) {
+    protected Signal getSignal(RuleWrapper ruleWrapper, AssetData assetData) {
         return new Signal()
                 .setName(ruleWrapper.getName())
                 .setInterval(assetData.getInterval())

@@ -38,7 +38,7 @@
             </dependency>
             <dependency>
                 <groupId>pab.ta.handler.base.boot</groupId>
-                <artifactId>signal-library</artifactId>
+                <artifactId>signal-base-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
