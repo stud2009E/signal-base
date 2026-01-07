@@ -55,7 +55,6 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
                                         .setTicker(assetData.getInfo().getTicker())
                                         .setInterval(assetData.getInterval())
                                         .setDirection(SELL)
-                                        .addType(getIndicatorTypes())
                                         .setName("DVG MACD")
                                         .setCreatedAt(ZonedDateTime.now()));
                             }
@@ -69,7 +68,6 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
                                         .setTicker(assetData.getInfo().getTicker())
                                         .setInterval(assetData.getInterval())
                                         .setDirection(SELL)
-                                        .addType(getIndicatorTypes())
                                         .setName("DVG MACD HIDDEN")
                                         .setCreatedAt(ZonedDateTime.now()));
                             }
@@ -92,7 +90,6 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
                                         .setTicker(assetData.getInfo().getTicker())
                                         .setInterval(assetData.getInterval())
                                         .setDirection(BUY)
-                                        .addType(getIndicatorTypes())
                                         .setName("DVG MACD")
                                         .setCreatedAt(ZonedDateTime.now()));
                             }
@@ -106,7 +103,6 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
                                         .setTicker(assetData.getInfo().getTicker())
                                         .setInterval(assetData.getInterval())
                                         .setDirection(BUY)
-                                        .addType(getIndicatorTypes())
                                         .setName("DVG MACD HIDDEN")
                                         .setCreatedAt(ZonedDateTime.now()));
                             }

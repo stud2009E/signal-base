@@ -40,7 +40,7 @@ public class SignalBaseConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SignalProcessor signalProcessor() {
+    public SignalProcessor signalLogger() {
         log.debug("Signal processor is created");
 
         return (assetInfo, signals) -> {

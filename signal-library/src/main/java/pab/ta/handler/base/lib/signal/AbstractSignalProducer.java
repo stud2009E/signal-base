@@ -34,7 +34,6 @@ public abstract class AbstractSignalProducer implements AssetDataProcessor {
                 .setInterval(assetData.getInterval())
                 .setTicker(assetData.getInfo().getTicker())
                 .setDirection(ruleWrapper.getDirection())
-                .addType(ruleWrapper.getTypes())
                 .setCreatedAt(assetData.getCreatedAt());
     }
 
