@@ -35,8 +35,8 @@ public class AssetData {
         return indicatorMap.containsKey(key);
     }
 
-    public boolean hasInterval(CandleInterval other) {
-        return getInterval().equals(other);
+    public boolean hasInterval(CandleInterval interval) {
+        return getInterval().equals(interval);
     }
 
     public CandleInterval getInterval() {

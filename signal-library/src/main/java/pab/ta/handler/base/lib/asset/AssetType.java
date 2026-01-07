@@ -8,5 +8,6 @@ public enum AssetType {
     SHARE,
     FUTURE,
     CURRENCY,
-    INDEX
+    INDEX,
+    BOND
 }

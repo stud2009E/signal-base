@@ -25,7 +25,8 @@ public class AdxSignalProducer extends AbstractSignalProducer {
     protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList
+        assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(ADX14))
                 .forEach(assetData -> {
                     Indicator<Num> adx = assetData.getIndicator(ADX14);
                     Indicator<Num> adxPlus = assetData.getIndicator(ADX_PLUS14);
@@ -39,13 +40,6 @@ public class AdxSignalProducer extends AbstractSignalProducer {
                 });
 
         return signals;
-    }
-
-    @Override
-    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
-        return assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(ADX14))
-                .toList();
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> adx, Indicator<Num> adxPlus, Indicator<Num> adxMinus) {

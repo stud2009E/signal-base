@@ -51,10 +51,4 @@ public class Signal {
 
         return this;
     }
-
-    public Signal addType(IndicatorType... types) {
-        this.types.addAll(List.of(types));
-
-        return this;
-    }
 }

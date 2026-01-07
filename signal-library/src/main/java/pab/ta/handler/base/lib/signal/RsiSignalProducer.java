@@ -23,7 +23,8 @@ public class RsiSignalProducer extends AbstractSignalProducer {
     protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList
+        assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(RSI14))
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(RSI14);
                     var index = indicator.getBarSeries().getEndIndex();
@@ -37,13 +38,6 @@ public class RsiSignalProducer extends AbstractSignalProducer {
         return signals;
     }
 
-    @Override
-    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
-        return assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(RSI14))
-                .toList();
-    }
-
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {
 
         var over = new OverIndicatorRule(indicator, 70);
@@ -51,10 +45,12 @@ public class RsiSignalProducer extends AbstractSignalProducer {
         var crossUp30 = new CrossedUpIndicatorRule(indicator, 30);
         var crossUp70 = new CrossedUpIndicatorRule(indicator, 70);
         var crossDown70 = new CrossedDownIndicatorRule(indicator, 70);
-        var crossDown30 = new CrossedDownIndicatorRule(indicator, 70);
+        var crossDown30 = new CrossedDownIndicatorRule(indicator, 30);
 
-        var waveDown = new ChainRule(crossDown30, new ChainLink(crossUp30, 10), new ChainLink(crossDown30, 10));
-        var waveUp = new ChainRule(crossUp70, new ChainLink(crossDown70, 10), new ChainLink(crossUp70, 10));
+        var waveDown = new ChainRule(crossDown30,
+                new ChainLink(crossUp30, 10), new ChainLink(crossDown30, 10));
+        var waveUp = new ChainRule(crossUp70,
+                new ChainLink(crossDown70, 10), new ChainLink(crossUp70, 10));
 
         return List.of(
                 new RuleWrapper()

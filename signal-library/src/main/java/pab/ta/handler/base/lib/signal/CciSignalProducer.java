@@ -26,7 +26,8 @@ public class CciSignalProducer extends AbstractSignalProducer {
     protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList
+        assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(CCI14))
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(CCI14);
                     var index = indicator.getBarSeries().getEndIndex();
@@ -38,13 +39,6 @@ public class CciSignalProducer extends AbstractSignalProducer {
                 });
 
         return signals;
-    }
-
-    @Override
-    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
-        return assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(CCI14))
-                .toList();
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {

@@ -26,13 +26,7 @@ public abstract class AbstractSignalProducer implements SignalProducer {
 
     @Override
     public List<Signal> getSignals(List<AssetData> assetDataList) {
-        var checkedData = filterDataForSignal(assetDataList);
-
-        if (checkedData.isEmpty()) {
-            return List.of();
-        }
-
-        return produceSignals(checkedData);
+        return produceSignals(assetDataList);
     }
 
     protected Signal getSignal(RuleWrapper ruleWrapper, AssetData assetData) {
@@ -46,8 +40,6 @@ public abstract class AbstractSignalProducer implements SignalProducer {
     }
 
     protected abstract List<Signal> produceSignals(List<AssetData> assetDataList);
-
-    protected abstract List<AssetData> filterDataForSignal(List<AssetData> assetDataList);
 
     @Setter
     @Getter

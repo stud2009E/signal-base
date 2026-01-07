@@ -16,7 +16,6 @@ import java.util.List;
 import static pab.ta.handler.base.lib.asset.Direction.BUY;
 import static pab.ta.handler.base.lib.asset.Direction.SELL;
 import static pab.ta.handler.base.lib.indicator.IndicatorType.DVG_MACD;
-import static pab.ta.handler.base.lib.indicator.IndicatorType.MACD;
 
 
 public class DvgMacdSignalProducer extends AbstractSignalProducer {
@@ -28,113 +27,108 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
     }
 
     @Override
-    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
-        return assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(MACD))
-                .toList();
-    }
-
-    @Override
     protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList.forEach(assetData -> {
-            Indicator<Num> macd = assetData.getIndicator(DVG_MACD);
-            BarSeries series = macd.getBarSeries();
+        assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(DVG_MACD))
+                .forEach(assetData -> {
+                    Indicator<Num> macd = assetData.getIndicator(DVG_MACD);
+                    BarSeries series = macd.getBarSeries();
 
-            var endIndex = series.getEndIndex();
-            var currentIndex = endIndex - 1;
+                    var endIndex = series.getEndIndex();
+                    var currentIndex = endIndex - 1;
 
 
-            if (isSwingHigh(macd, currentIndex, LOOK_BACK)) {
-                int prevHighIndex = findPreviousSwingHigh(macd, currentIndex, LOOK_BACK);
-                if (prevHighIndex != -1) {
-                    Num prevHighPrice = getHighestPrice(prevHighIndex, series, LOOK_BACK);
-                    Num currHighPrice = getHighestPrice(currentIndex, series, LOOK_BACK);
+                    if (isSwingHigh(macd, currentIndex, LOOK_BACK)) {
+                        int prevHighIndex = findPreviousSwingHigh(macd, currentIndex, LOOK_BACK);
+                        if (prevHighIndex != -1) {
+                            Num prevHighPrice = getHighestPrice(prevHighIndex, series, LOOK_BACK);
+                            Num currHighPrice = getHighestPrice(currentIndex, series, LOOK_BACK);
 
-                    boolean isMacdDown = macd.getValue(prevHighIndex).isGreaterThan(macd.getValue(currentIndex));
-                    boolean isPriceUp = prevHighPrice.isLessThan(currHighPrice);
+                            boolean isMacdDown = macd.getValue(prevHighIndex).isGreaterThan(macd.getValue(currentIndex));
+                            boolean isPriceUp = prevHighPrice.isLessThan(currHighPrice);
 
-                    if (isMacdDown && isPriceUp) {
-                        //regular bearish
-                        signals.add(new Signal()
-                                .setTicker(assetData.getInfo().getTicker())
-                                .setInterval(assetData.getInterval())
-                                .setDirection(SELL)
-                                .addType(getIndicatorTypes())
-                                .setName("DVG MACD")
-                                .setCreatedAt(ZonedDateTime.now()));
+                            if (isMacdDown && isPriceUp) {
+                                //regular bearish
+                                signals.add(new Signal()
+                                        .setTicker(assetData.getInfo().getTicker())
+                                        .setInterval(assetData.getInterval())
+                                        .setDirection(SELL)
+                                        .addType(getIndicatorTypes())
+                                        .setName("DVG MACD")
+                                        .setCreatedAt(ZonedDateTime.now()));
+                            }
+
+                            boolean isMacdUp = macd.getValue(prevHighIndex).isLessThan(macd.getValue(currentIndex));
+                            boolean isPriceDown = prevHighPrice.isGreaterThan(currHighPrice);
+
+                            if (isMacdUp && isPriceDown) {
+                                //hidden bearish
+                                signals.add(new Signal()
+                                        .setTicker(assetData.getInfo().getTicker())
+                                        .setInterval(assetData.getInterval())
+                                        .setDirection(SELL)
+                                        .addType(getIndicatorTypes())
+                                        .setName("DVG MACD HIDDEN")
+                                        .setCreatedAt(ZonedDateTime.now()));
+                            }
+                        }
                     }
 
-                    boolean isMacdUp = macd.getValue(prevHighIndex).isLessThan(macd.getValue(currentIndex));
-                    boolean isPriceDown = prevHighPrice.isGreaterThan(currHighPrice);
+                    if (isSwingLow(macd, currentIndex, LOOK_BACK)) {
+                        int prevLowIndex = findPreviousSwingLow(macd, currentIndex, LOOK_BACK);
+                        if (prevLowIndex != -1) {
 
-                    if (isMacdUp && isPriceDown) {
-                        //hidden bearish
-                        signals.add(new Signal()
-                                .setTicker(assetData.getInfo().getTicker())
-                                .setInterval(assetData.getInterval())
-                                .setDirection(SELL)
-                                .addType(getIndicatorTypes())
-                                .setName("DVG MACD HIDDEN")
-                                .setCreatedAt(ZonedDateTime.now()));
+                            Num prevLowPrice = getLowestPrice(prevLowIndex, series, LOOK_BACK);
+                            Num currLowPrice = getLowestPrice(currentIndex, series, LOOK_BACK);
+
+                            boolean isMacdUp = macd.getValue(prevLowIndex).isLessThan(macd.getValue(currentIndex));
+                            boolean isPriceDown = prevLowPrice.isGreaterThan(currLowPrice);
+
+                            if (isMacdUp && isPriceDown) {
+                                //regular bullish
+                                signals.add(new Signal()
+                                        .setTicker(assetData.getInfo().getTicker())
+                                        .setInterval(assetData.getInterval())
+                                        .setDirection(BUY)
+                                        .addType(getIndicatorTypes())
+                                        .setName("DVG MACD")
+                                        .setCreatedAt(ZonedDateTime.now()));
+                            }
+
+                            boolean isMacdDown = macd.getValue(prevLowIndex).isGreaterThan(macd.getValue(currentIndex));
+                            boolean isPriceUp = prevLowPrice.isLessThan(currLowPrice);
+
+                            if (isMacdDown && isPriceUp) {
+                                //hidden bullish
+                                signals.add(new Signal()
+                                        .setTicker(assetData.getInfo().getTicker())
+                                        .setInterval(assetData.getInterval())
+                                        .setDirection(BUY)
+                                        .addType(getIndicatorTypes())
+                                        .setName("DVG MACD HIDDEN")
+                                        .setCreatedAt(ZonedDateTime.now()));
+                            }
+
+                        }
                     }
-                }
-            }
-
-            if (isSwingLow(macd, currentIndex, LOOK_BACK)) {
-                int prevLowIndex = findPreviousSwingLow(macd, currentIndex, LOOK_BACK);
-                if (prevLowIndex != -1) {
-
-                    Num prevLowPrice = getLowestPrice(prevLowIndex, series, LOOK_BACK);
-                    Num currLowPrice = getLowestPrice(currentIndex, series, LOOK_BACK);
-
-                    boolean isMacdUp = macd.getValue(prevLowIndex).isLessThan(macd.getValue(currentIndex));
-                    boolean isPriceDown = prevLowPrice.isGreaterThan(currLowPrice);
-
-                    if (isMacdUp && isPriceDown) {
-                        //regular bullish
-                        signals.add(new Signal()
-                                .setTicker(assetData.getInfo().getTicker())
-                                .setInterval(assetData.getInterval())
-                                .setDirection(BUY)
-                                .addType(getIndicatorTypes())
-                                .setName("DVG MACD")
-                                .setCreatedAt(ZonedDateTime.now()));
-                    }
-
-                    boolean isMacdDown = macd.getValue(prevLowIndex).isGreaterThan(macd.getValue(currentIndex));
-                    boolean isPriceUp = prevLowPrice.isLessThan(currLowPrice);
-
-                    if (isMacdDown && isPriceUp) {
-                        //hidden bullish
-                        signals.add(new Signal()
-                                .setTicker(assetData.getInfo().getTicker())
-                                .setInterval(assetData.getInterval())
-                                .setDirection(BUY)
-                                .addType(getIndicatorTypes())
-                                .setName("DVG MACD HIDDEN")
-                                .setCreatedAt(ZonedDateTime.now()));
-                    }
-
-                }
-            }
-        });
+                });
 
         return signals;
     }
 
     private boolean isSwingHigh(Indicator<Num> indicator, int index, int lookBack) {
-        var currentValue = indicator.getValue(index);
-        var endIndex = indicator.getBarSeries().getEndIndex();
+        if (indicator.getCountOfUnstableBars() > index - lookBack) {
+            return false;
+        }
 
         if (indicator.getValue(index).isNegativeOrZero()) {
             return false;
         }
 
-        if (indicator.getCountOfUnstableBars() > index - lookBack) {
-            return false;
-        }
+
+        var currentValue = indicator.getValue(index);
 
         //left side
         for (int i = 1; i <= lookBack; i++) {
@@ -147,6 +141,7 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
             }
         }
 
+        var endIndex = indicator.getBarSeries().getEndIndex();
         //right side
         for (int i = 1; i <= lookBack; i++) {
             if (index + i > endIndex) {
@@ -162,17 +157,15 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
     }
 
     private boolean isSwingLow(Indicator<Num> indicator, int index, int lookBack) {
-        var currentValue = indicator.getValue(index);
-        var endIndex = indicator.getBarSeries().getEndIndex();
+        if (indicator.getCountOfUnstableBars() > index - lookBack) {
+            return false;
+        }
 
         if (indicator.getValue(index).isPositiveOrZero()) {
             return false;
         }
 
-        if (indicator.getCountOfUnstableBars() > index - lookBack) {
-            return false;
-        }
-
+        var currentValue = indicator.getValue(index);
         //left side
         for (int i = 1; i <= lookBack; i++) {
             if (index - i < 0) {
@@ -184,6 +177,7 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
             }
         }
 
+        var endIndex = indicator.getBarSeries().getEndIndex();
         //right side
         for (int i = 1; i <= lookBack; i++) {
             if (index + i > endIndex) {
@@ -251,6 +245,4 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
         return indicator.getValue(startIndex);
     }
-
-
 }

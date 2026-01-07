@@ -4,7 +4,7 @@ import pab.ta.handler.base.lib.asset.CandleInterval;
 
 import java.time.ZonedDateTime;
 
-public interface CandleFromCalculator {
+public interface CandleHelper {
 
     ZonedDateTime calculate(ZonedDateTime to, CandleInterval interval);
 

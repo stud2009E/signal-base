@@ -21,17 +21,11 @@ public class BBLowSignalProducer extends AbstractSignalProducer {
     }
 
     @Override
-    protected List<AssetData> filterDataForSignal(List<AssetData> assetDataList) {
-        return assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(BB_LOW))
-                .toList();
-    }
-
-    @Override
     protected List<Signal> produceSignals(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
-        assetDataList
+        assetDataList.stream()
+                .filter(assetData -> assetData.hasIndicator(BB_LOW))
                 .forEach(assetData -> {
                     Indicator<Num> indicator = assetData.getIndicator(BB_LOW);
                     var series = indicator.getBarSeries();
