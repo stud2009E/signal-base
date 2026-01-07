@@ -15,12 +15,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.RSI14;
 
 public class RsiSignalProducer extends AbstractSignalProducer {
 
-    public RsiSignalProducer() {
-        super(RSI14);
+    public RsiSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, RSI14);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -35,7 +35,9 @@ public class RsiSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {

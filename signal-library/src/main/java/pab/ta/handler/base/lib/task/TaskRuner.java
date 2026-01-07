@@ -9,8 +9,6 @@ import pab.ta.handler.base.lib.asset.TimeFrame;
 import pab.ta.handler.base.lib.indicator.IndicatorFactory;
 import pab.ta.handler.base.lib.provider.AssetInfoProvider;
 import pab.ta.handler.base.lib.provider.SeriesProvider;
-import pab.ta.handler.base.lib.signal.SignalProcessor;
-import pab.ta.handler.base.lib.signal.SignalProducer;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -30,15 +28,13 @@ public class TaskRuner {
 
     private final CandleHelper fromCalculator;
 
-    private final List<SignalProducer> signalProducers;
-
-    private final SignalProcessor signalProcessor;
+    private final List<AssetDataProcessor> dataProcessors;
 
     public void run() {
         var to = ZonedDateTime.now();
 
-        var indicatorTypes = signalProducers.stream()
-                .map(SignalProducer::getIndicatorTypes)
+        var indicatorTypes = dataProcessors.stream()
+                .map(AssetDataProcessor::getIndicatorTypes)
                 .flatMap(Set::stream)
                 .collect(Collectors.toSet());
 
@@ -59,6 +55,7 @@ public class TaskRuner {
                         var assetData = AssetData.builder()
                                 .info(assetInfo)
                                 .timeFrame(tf)
+                                .barSeries(series)
                                 .createdAt(ZonedDateTime.now())
                                 .build();
 
@@ -68,14 +65,7 @@ public class TaskRuner {
                         assetDataList.add(assetData);
                     }
 
-                    var signals = signalProducers.stream()
-                            .map(producer -> producer.getSignals(assetDataList))
-                            .flatMap(List::stream)
-                            .toList();
-
-                    if (!signals.isEmpty()) {
-                        signalProcessor.process(assetInfo, signals);
-                    }
+                    dataProcessors.forEach(dataProcessor -> dataProcessor.process(assetDataList));
                 });
     }
 

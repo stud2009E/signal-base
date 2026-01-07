@@ -16,12 +16,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.MACD;
 
 public class MacdSignalProducer extends AbstractSignalProducer {
 
-    public MacdSignalProducer() {
-        super(MACD);
+    public MacdSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, MACD);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -36,7 +36,9 @@ public class MacdSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {

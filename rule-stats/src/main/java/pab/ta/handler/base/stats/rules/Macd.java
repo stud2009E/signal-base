@@ -74,6 +74,4 @@ public class Macd {
             return rule.isSatisfied(index);
         }
     }
-
-
 }

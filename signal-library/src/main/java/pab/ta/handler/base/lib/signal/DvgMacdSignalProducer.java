@@ -22,12 +22,12 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
     private static final int LOOK_BACK = 5;
 
-    public DvgMacdSignalProducer() {
-        super(DVG_MACD);
+    public DvgMacdSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, DVG_MACD);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -115,7 +115,9 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
                     }
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     private boolean isSwingHigh(Indicator<Num> indicator, int index, int lookBack) {
@@ -126,7 +128,6 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
         if (indicator.getValue(index).isNegativeOrZero()) {
             return false;
         }
-
 
         var currentValue = indicator.getValue(index);
 

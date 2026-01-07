@@ -18,12 +18,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.CCI14;
 
 public class CciSignalProducer extends AbstractSignalProducer {
 
-    public CciSignalProducer() {
-        super(CCI14);
+    public CciSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, CCI14);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -38,7 +38,9 @@ public class CciSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {

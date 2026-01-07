@@ -3,6 +3,7 @@ package pab.ta.handler.base.lib.asset;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.num.Num;
 import pab.ta.handler.base.lib.indicator.IndicatorType;
@@ -21,6 +22,8 @@ public class AssetData {
 
     private final ZonedDateTime createdAt;
 
+    private final BarSeries barSeries;
+
     private final Map<IndicatorType, Indicator<Num>> indicatorMap = new HashMap<>();
 
     public void putIndicator(IndicatorType key, Indicator<Num> value) {
@@ -33,10 +36,6 @@ public class AssetData {
 
     public boolean hasIndicator(IndicatorType key) {
         return indicatorMap.containsKey(key);
-    }
-
-    public boolean hasInterval(CandleInterval interval) {
-        return getInterval().equals(interval);
     }
 
     public CandleInterval getInterval() {
@@ -67,6 +66,4 @@ public class AssetData {
         result = 31 * result + getInterval().hashCode();
         return result;
     }
-
-
 }

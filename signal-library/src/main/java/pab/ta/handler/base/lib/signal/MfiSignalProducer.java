@@ -17,12 +17,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.MFI14;
 
 public class MfiSignalProducer extends AbstractSignalProducer {
 
-    public MfiSignalProducer() {
-        super(MFI14);
+    public MfiSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, MFI14);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -37,7 +37,9 @@ public class MfiSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator) {

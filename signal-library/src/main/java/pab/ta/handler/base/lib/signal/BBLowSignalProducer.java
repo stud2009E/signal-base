@@ -16,12 +16,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.BB_LOW;
 
 public class BBLowSignalProducer extends AbstractSignalProducer {
 
-    public BBLowSignalProducer() {
-        super(BB_LOW);
+    public BBLowSignalProducer(SignalProcessor signalProcessor) {
+        super(signalProcessor, BB_LOW);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -36,7 +36,9 @@ public class BBLowSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> indicator, NumericIndicator closePrice) {

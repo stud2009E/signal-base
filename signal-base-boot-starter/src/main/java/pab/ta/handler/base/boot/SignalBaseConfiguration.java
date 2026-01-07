@@ -10,6 +10,7 @@ import pab.ta.handler.base.lib.asset.CandleInterval;
 import pab.ta.handler.base.lib.provider.AssetInfoProvider;
 import pab.ta.handler.base.lib.provider.SeriesProvider;
 import pab.ta.handler.base.lib.signal.*;
+import pab.ta.handler.base.lib.task.AssetDataProcessor;
 import pab.ta.handler.base.lib.task.CandleHelper;
 import pab.ta.handler.base.lib.task.CandleHelperImpl;
 import pab.ta.handler.base.lib.task.TaskRuner;
@@ -59,29 +60,28 @@ public class SignalBaseConfiguration {
             @Autowired SeriesProvider seriesProvider,
             @Value("${signal.task.intervals}") List<CandleInterval> candleIntervals,
             @Autowired CandleHelper fromCalculator,
-            @Autowired List<SignalProducer> signalProducers,
-            @Autowired SignalProcessor signalProcessor
+            @Autowired List<AssetDataProcessor> assetDataProcessors
     ) {
         log.debug("Task runner for {} is created", candleIntervals);
 
         return new TaskRuner(infoProvider, seriesProvider, candleIntervals,
-                fromCalculator, signalProducers, signalProcessor);
+                fromCalculator, assetDataProcessors);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public List<SignalProducer> signalProducers() {
+    public List<AssetDataProcessor> signalProducers(@Autowired SignalProcessor signalProcessor) {
         log.debug("Signal producers are created");
 
         return List.of(
-                new RsiSignalProducer(),
-                new MfiSignalProducer(),
-                new CciSignalProducer(),
-                new MacdSignalProducer(),
-                new DvgMacdSignalProducer(),
-                new AdxSignalProducer(),
-                new BBLowSignalProducer(),
-                new BBUpSignalProducer()
+                new RsiSignalProducer(signalProcessor),
+                new MfiSignalProducer(signalProcessor),
+                new CciSignalProducer(signalProcessor),
+                new MacdSignalProducer(signalProcessor),
+                new DvgMacdSignalProducer(signalProcessor),
+                new AdxSignalProducer(signalProcessor),
+                new BBLowSignalProducer(signalProcessor),
+                new BBUpSignalProducer(signalProcessor)
         );
     }
 }

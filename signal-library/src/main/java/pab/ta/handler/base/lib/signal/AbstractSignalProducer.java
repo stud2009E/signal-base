@@ -9,6 +9,7 @@ import org.ta4j.core.Rule;
 import pab.ta.handler.base.lib.asset.AssetData;
 import pab.ta.handler.base.lib.asset.Direction;
 import pab.ta.handler.base.lib.indicator.IndicatorType;
+import pab.ta.handler.base.lib.task.AssetDataProcessor;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,18 +17,16 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-public abstract class AbstractSignalProducer implements SignalProducer {
+public abstract class AbstractSignalProducer implements AssetDataProcessor {
 
+    private final SignalProcessor signalProcessor;
     private final Set<IndicatorType> indicatorTypes = new HashSet<>();
 
-    public AbstractSignalProducer(IndicatorType... indicatorTypes) {
+    public AbstractSignalProducer(SignalProcessor signalProcessor, IndicatorType... indicatorTypes) {
+        this.signalProcessor = signalProcessor;
         this.indicatorTypes.addAll(List.of(indicatorTypes));
     }
 
-    @Override
-    public List<Signal> getSignals(List<AssetData> assetDataList) {
-        return produceSignals(assetDataList);
-    }
 
     protected Signal getSignal(RuleWrapper ruleWrapper, AssetData assetData) {
         return new Signal()
@@ -38,8 +37,6 @@ public abstract class AbstractSignalProducer implements SignalProducer {
                 .addType(ruleWrapper.getTypes())
                 .setCreatedAt(assetData.getCreatedAt());
     }
-
-    protected abstract List<Signal> produceSignals(List<AssetData> assetDataList);
 
     @Setter
     @Getter

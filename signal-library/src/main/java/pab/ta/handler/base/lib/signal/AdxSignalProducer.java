@@ -17,12 +17,12 @@ import static pab.ta.handler.base.lib.indicator.IndicatorType.*;
 
 public class AdxSignalProducer extends AbstractSignalProducer {
 
-    public AdxSignalProducer() {
-        super(ADX14);
+    public AdxSignalProducer(SignalProcessor processor) {
+        super(processor, ADX14);
     }
 
     @Override
-    protected List<Signal> produceSignals(List<AssetData> assetDataList) {
+    public void process(List<AssetData> assetDataList) {
         List<Signal> signals = new LinkedList<>();
 
         assetDataList.stream()
@@ -39,7 +39,9 @@ public class AdxSignalProducer extends AbstractSignalProducer {
                             .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
                 });
 
-        return signals;
+        if (!signals.isEmpty()) {
+            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        }
     }
 
     protected List<RuleWrapper> rules(Indicator<Num> adx, Indicator<Num> adxPlus, Indicator<Num> adxMinus) {
