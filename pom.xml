@@ -16,7 +16,6 @@
     <modules>
         <module>signal-library</module>
         <module>signal-base-boot-starter</module>
-        <module>rule-stats</module>
     </modules>
 
     <packaging>pom</packaging>
