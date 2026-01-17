@@ -1,46 +1,50 @@
 package pab.ta.handler.base.lib.signal;
 
+import lombok.RequiredArgsConstructor;
 import org.ta4j.core.Indicator;
+import org.ta4j.core.indicators.RSIIndicator;
+import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.*;
 import org.ta4j.core.rules.helper.ChainLink;
 import pab.ta.handler.base.lib.asset.AssetData;
+import pab.ta.handler.base.lib.asset.CandleInterval;
+import pab.ta.handler.base.lib.task.AssetDataProcessor;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static pab.ta.handler.base.lib.asset.Direction.BUY;
 import static pab.ta.handler.base.lib.asset.Direction.SELL;
-import static pab.ta.handler.base.lib.indicator.IndicatorType.RSI14;
 
-public class RsiSignalProducer extends AbstractSignalProducer {
+@RequiredArgsConstructor
+public class RsiSignalProducer implements AssetDataProcessor {
 
-    public RsiSignalProducer(SignalProcessor signalProcessor) {
-        super(signalProcessor, RSI14);
-    }
+    private final SignalProcessor signalProcessor;
 
     @Override
     public void process(List<AssetData> assetDataList) {
-        List<Signal> signals = new LinkedList<>();
+        List<Signal> signalList = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(RSI14))
-                .forEach(assetData -> {
-                    Indicator<Num> indicator = assetData.getIndicator(RSI14);
-                    var index = indicator.getBarSeries().getEndIndex();
+        assetDataList.forEach(assetData -> {
+            var series = assetData.getBarSeries();
 
-                    rules(indicator)
-                            .stream()
-                            .filter(ruleWrapper -> ruleWrapper.getRule().isSatisfied(index))
-                            .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
-                });
+            var closePrice = new ClosePriceIndicator(series);
+            var indicator = new RSIIndicator(closePrice, 14);
+            var index = indicator.getBarSeries().getEndIndex();
 
-        if (!signals.isEmpty()) {
-            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+            signals(assetData.getTicker(), assetData.getInterval(), indicator)
+                    .stream()
+                    .filter(signal -> signal.getRule().isSatisfied(index))
+                    .forEach(signalList::add);
+        });
+
+        if (!signalList.isEmpty()) {
+            signalProcessor.process(assetDataList.getFirst().getInfo(), signalList);
         }
     }
 
-    protected List<RuleWrapper> rules(Indicator<Num> indicator) {
+    protected List<Signal> signals(String ticker, CandleInterval interval, Indicator<Num> indicator) {
 
         var over = new OverIndicatorRule(indicator, 70);
         var under = new UnderIndicatorRule(indicator, 30);
@@ -55,26 +59,34 @@ public class RsiSignalProducer extends AbstractSignalProducer {
                 new ChainLink(crossDown70, 10), new ChainLink(crossUp70, 10));
 
         return List.of(
-                new RuleWrapper()
-                        .addType(RSI14)
-                        .setDirection(SELL)
-                        .setRule(over)
-                        .setName("RSI > 70"),
-                new RuleWrapper()
-                        .addType(RSI14)
-                        .setDirection(BUY)
-                        .setRule(under)
-                        .setName("RSI < 30"),
-                new RuleWrapper()
-                        .addType(RSI14)
-                        .setDirection(SELL)
-                        .setRule(waveDown)
-                        .setName("2x RSI >< 30"),
-                new RuleWrapper()
-                        .addType(RSI14)
-                        .setDirection(BUY)
-                        .setRule(waveUp)
-                        .setName("2x RSI <> 70")
+                Signal.builder()
+                        .name("RSI > 70")
+                        .interval(interval)
+                        .ticker(ticker)
+                        .direction(SELL)
+                        .rule(over)
+                        .build(),
+                Signal.builder()
+                        .name("RSI < 30")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(BUY)
+                        .rule(under)
+                        .build(),
+                Signal.builder()
+                        .name("2x RSI >< 30")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(SELL)
+                        .rule(waveDown)
+                        .build(),
+                Signal.builder()
+                        .name("2x RSI <> 70")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(BUY)
+                        .rule(waveUp)
+                        .build()
         );
     }
 

@@ -1,69 +1,33 @@
 package pab.ta.handler.base.lib.asset;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.ta4j.core.BarSeries;
-import org.ta4j.core.Indicator;
-import org.ta4j.core.num.Num;
-import pab.ta.handler.base.lib.indicator.IndicatorType;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Getter
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AssetData {
+    @EqualsAndHashCode.Include
     private final AssetInfo info;
 
+    @EqualsAndHashCode.Include
     private final TimeFrame timeFrame;
 
     private final ZonedDateTime createdAt;
 
     private final BarSeries barSeries;
 
-    private final Map<IndicatorType, Indicator<Num>> indicatorMap = new HashMap<>();
-
-    public void putIndicator(IndicatorType key, Indicator<Num> value) {
-        indicatorMap.put(key, value);
-    }
-
-    public Indicator<Num> getIndicator(IndicatorType key) {
-        return indicatorMap.get(key);
-    }
-
-    public boolean hasIndicator(IndicatorType key) {
-        return indicatorMap.containsKey(key);
-    }
-
     public CandleInterval getInterval() {
         return timeFrame.getInterval();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        AssetData assetData = (AssetData) o;
-
-        if (!info.equals(assetData.info)) {
-            return false;
-        }
-
-        return getInterval() == assetData.getInterval();
-    }
-
-    @Override
-    public int hashCode() {
-        int result = info.getTicker().hashCode();
-        result = 31 * result + getInterval().hashCode();
-        return result;
+    public String getTicker(){
+        return info.getTicker();
     }
 }

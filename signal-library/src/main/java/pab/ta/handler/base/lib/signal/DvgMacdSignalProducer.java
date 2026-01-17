@@ -1,44 +1,42 @@
 package pab.ta.handler.base.lib.signal;
 
+import lombok.RequiredArgsConstructor;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
-import org.ta4j.core.indicators.helpers.HighPriceIndicator;
-import org.ta4j.core.indicators.helpers.HighestValueIndicator;
-import org.ta4j.core.indicators.helpers.LowPriceIndicator;
-import org.ta4j.core.indicators.helpers.LowestValueIndicator;
+import org.ta4j.core.indicators.MACDIndicator;
+import org.ta4j.core.indicators.helpers.*;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.rules.BooleanRule;
 import pab.ta.handler.base.lib.asset.AssetData;
+import pab.ta.handler.base.lib.task.AssetDataProcessor;
 
-import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 import static pab.ta.handler.base.lib.asset.Direction.BUY;
 import static pab.ta.handler.base.lib.asset.Direction.SELL;
-import static pab.ta.handler.base.lib.indicator.IndicatorType.DVG_MACD;
 
-
-public class DvgMacdSignalProducer extends AbstractSignalProducer {
+@RequiredArgsConstructor
+public class DvgMacdSignalProducer implements AssetDataProcessor {
 
     private static final int LOOK_BACK = 5;
-
-    public DvgMacdSignalProducer(SignalProcessor signalProcessor) {
-        super(signalProcessor, DVG_MACD);
-    }
+    private final SignalProcessor signalProcessor;
 
     @Override
     public void process(List<AssetData> assetDataList) {
-        List<Signal> signals = new LinkedList<>();
+        List<Signal> signalList = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(DVG_MACD))
+        assetDataList
                 .forEach(assetData -> {
-                    Indicator<Num> macd = assetData.getIndicator(DVG_MACD);
-                    BarSeries series = macd.getBarSeries();
+                    var ticker = assetData.getTicker();
+                    var interval = assetData.getInterval();
 
+                    var series = assetData.getBarSeries();
+                    var closePrice = new ClosePriceIndicator(series);
+
+                    Indicator<Num> macd = new MACDIndicator(closePrice);
                     var endIndex = series.getEndIndex();
                     var currentIndex = endIndex - 1;
-
 
                     if (isSwingHigh(macd, currentIndex, LOOK_BACK)) {
                         int prevHighIndex = findPreviousSwingHigh(macd, currentIndex, LOOK_BACK);
@@ -51,12 +49,13 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
                             if (isMacdDown && isPriceUp) {
                                 //regular bearish
-                                signals.add(new Signal()
-                                        .setTicker(assetData.getInfo().getTicker())
-                                        .setInterval(assetData.getInterval())
-                                        .setDirection(SELL)
-                                        .setName("DVG MACD")
-                                        .setCreatedAt(ZonedDateTime.now()));
+                                signalList.add(Signal.builder()
+                                        .ticker(ticker)
+                                        .interval(interval)
+                                        .direction(SELL)
+                                        .name("DVG MACD")
+                                        .rule(new BooleanRule(true))
+                                        .build());
                             }
 
                             boolean isMacdUp = macd.getValue(prevHighIndex).isLessThan(macd.getValue(currentIndex));
@@ -64,12 +63,13 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
                             if (isMacdUp && isPriceDown) {
                                 //hidden bearish
-                                signals.add(new Signal()
-                                        .setTicker(assetData.getInfo().getTicker())
-                                        .setInterval(assetData.getInterval())
-                                        .setDirection(SELL)
-                                        .setName("DVG MACD HIDDEN")
-                                        .setCreatedAt(ZonedDateTime.now()));
+                                signalList.add(Signal.builder()
+                                        .ticker(ticker)
+                                        .interval(interval)
+                                        .direction(SELL)
+                                        .name("DVG MACD HIDDEN")
+                                        .rule(new BooleanRule(true))
+                                        .build());
                             }
                         }
                     }
@@ -86,12 +86,13 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
                             if (isMacdUp && isPriceDown) {
                                 //regular bullish
-                                signals.add(new Signal()
-                                        .setTicker(assetData.getInfo().getTicker())
-                                        .setInterval(assetData.getInterval())
-                                        .setDirection(BUY)
-                                        .setName("DVG MACD")
-                                        .setCreatedAt(ZonedDateTime.now()));
+                                signalList.add(Signal.builder()
+                                        .ticker(ticker)
+                                        .interval(interval)
+                                        .direction(BUY)
+                                        .name("DVG MACD")
+                                        .rule(new BooleanRule(true))
+                                        .build());
                             }
 
                             boolean isMacdDown = macd.getValue(prevLowIndex).isGreaterThan(macd.getValue(currentIndex));
@@ -99,20 +100,21 @@ public class DvgMacdSignalProducer extends AbstractSignalProducer {
 
                             if (isMacdDown && isPriceUp) {
                                 //hidden bullish
-                                signals.add(new Signal()
-                                        .setTicker(assetData.getInfo().getTicker())
-                                        .setInterval(assetData.getInterval())
-                                        .setDirection(BUY)
-                                        .setName("DVG MACD HIDDEN")
-                                        .setCreatedAt(ZonedDateTime.now()));
+                                signalList.add(Signal.builder()
+                                        .ticker(ticker)
+                                        .interval(interval)
+                                        .direction(BUY)
+                                        .name("DVG MACD HIDDEN")
+                                        .rule(new BooleanRule(true))
+                                        .build());
                             }
 
                         }
                     }
                 });
 
-        if (!signals.isEmpty()) {
-            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        if (!signalList.isEmpty()) {
+            signalProcessor.process(assetDataList.getFirst().getInfo(), signalList);
         }
     }
 

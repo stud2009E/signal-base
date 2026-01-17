@@ -1,41 +1,33 @@
 package pab.ta.handler.base.lib.signal;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import lombok.RequiredArgsConstructor;
+import org.ta4j.core.Rule;
 import pab.ta.handler.base.lib.asset.CandleInterval;
 import pab.ta.handler.base.lib.asset.Direction;
 
 import java.time.ZonedDateTime;
 
-@NoArgsConstructor
-@Setter
+@RequiredArgsConstructor
 @Getter
-@Accessors(chain = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 public class Signal {
     @EqualsAndHashCode.Include
-    private String name;
+    private final String name;
 
     @EqualsAndHashCode.Include
-    private String ticker;
+    private final String ticker;
 
     @EqualsAndHashCode.Include
-    private CandleInterval interval;
+    private final CandleInterval interval;
 
-    private Direction direction;
+    private final Direction direction;
 
-    private ZonedDateTime createdAt;
+    @Builder.Default
+    private final ZonedDateTime createdAt = ZonedDateTime.now();
 
-
-    public Signal(String name, String ticker, CandleInterval interval, Direction direction, ZonedDateTime createdAt) {
-        this.name = name;
-        this.ticker = ticker;
-        this.interval = interval;
-        this.direction = direction;
-        this.createdAt = createdAt;
-    }
-
+    private final Rule rule;
 }

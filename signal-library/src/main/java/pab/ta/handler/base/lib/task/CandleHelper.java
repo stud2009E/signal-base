@@ -6,6 +6,6 @@ import java.time.ZonedDateTime;
 
 public interface CandleHelper {
 
-    ZonedDateTime calculate(ZonedDateTime to, CandleInterval interval);
+    ZonedDateTime calculateFrom(ZonedDateTime to, CandleInterval interval);
 
 }

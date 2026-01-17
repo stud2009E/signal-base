@@ -1,63 +1,79 @@
 package pab.ta.handler.base.lib.signal;
 
+import lombok.RequiredArgsConstructor;
 import org.ta4j.core.Indicator;
+import org.ta4j.core.indicators.bollinger.BollingerBandsLowerIndicator;
+import org.ta4j.core.indicators.bollinger.BollingerBandsMiddleIndicator;
+import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.indicators.numeric.NumericIndicator;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.rules.CrossedUpIndicatorRule;
 import org.ta4j.core.rules.UnderIndicatorRule;
 import pab.ta.handler.base.lib.asset.AssetData;
+import pab.ta.handler.base.lib.asset.CandleInterval;
+import pab.ta.handler.base.lib.task.AssetDataProcessor;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static pab.ta.handler.base.lib.asset.Direction.BUY;
-import static pab.ta.handler.base.lib.indicator.IndicatorType.BB_LOW;
 
-public class BBLowSignalProducer extends AbstractSignalProducer {
+@RequiredArgsConstructor
+public class BBLowSignalProducer implements AssetDataProcessor {
 
-    public BBLowSignalProducer(SignalProcessor signalProcessor) {
-        super(signalProcessor, BB_LOW);
-    }
+    private final SignalProcessor signalProcessor;
 
     @Override
     public void process(List<AssetData> assetDataList) {
-        List<Signal> signals = new LinkedList<>();
+        List<Signal> signalList = new LinkedList<>();
 
-        assetDataList.stream()
-                .filter(assetData -> assetData.hasIndicator(BB_LOW))
+        assetDataList
                 .forEach(assetData -> {
-                    Indicator<Num> indicator = assetData.getIndicator(BB_LOW);
-                    var series = indicator.getBarSeries();
+                    var series = assetData.getBarSeries();
+                    var closePrice = new ClosePriceIndicator(series);
+                    var numericClosePrice = NumericIndicator.of(closePrice);
 
-                    rules(indicator, NumericIndicator.closePrice(series))
+                    var indicator = new BollingerBandsLowerIndicator(
+                            new BollingerBandsMiddleIndicator(
+                                    numericClosePrice.sma(20)), numericClosePrice.stddev(20));
+
+                    rules(assetData.getTicker(), assetData.getInterval(), indicator, closePrice)
                             .stream()
-                            .filter(ruleWrapper -> ruleWrapper.getRule().isSatisfied(series.getEndIndex()))
-                            .forEach(ruleWrapper -> signals.add(getSignal(ruleWrapper, assetData)));
+                            .filter(signal -> signal.getRule().isSatisfied(series.getEndIndex()))
+                            .forEach(signalList::add);
                 });
 
-        if (!signals.isEmpty()) {
-            getSignalProcessor().process(assetDataList.getFirst().getInfo(), signals);
+        if (!signalList.isEmpty()) {
+            signalProcessor.process(assetDataList.getFirst().getInfo(), signalList);
         }
     }
 
-    protected List<RuleWrapper> rules(Indicator<Num> indicator, NumericIndicator closePrice) {
+    protected List<Signal> rules(String ticker, CandleInterval interval,
+                                 Indicator<Num> indicator, ClosePriceIndicator closePrice) {
         return List.of(
-                new RuleWrapper()
-                        .setDirection(BUY)
-                        .setRule(new UnderIndicatorRule(closePrice, indicator))
-                        .setName("BB_LOW > price")
-                        .addType(BB_LOW),
-                new RuleWrapper()
-                        .setDirection(BUY)
-                        .setRule(new CrossedDownIndicatorRule(closePrice, indicator))
-                        .setName("BB_LOW <> price")
-                        .addType(BB_LOW),
-                new RuleWrapper()
-                        .setDirection(BUY)
-                        .setRule(new CrossedUpIndicatorRule(closePrice, indicator))
-                        .setName("BB_LOW >< price")
-                        .addType(BB_LOW)
+                Signal.builder()
+                        .name("BB_LOW > price")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(BUY)
+                        .rule(new UnderIndicatorRule(closePrice, indicator))
+                        .build(),
+
+                Signal.builder()
+                        .name("BB_LOW <> price")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(BUY)
+                        .rule(new CrossedDownIndicatorRule(closePrice, indicator))
+                        .build(),
+                Signal.builder()
+                        .name("BB_LOW >< price")
+                        .ticker(ticker)
+                        .interval(interval)
+                        .direction(BUY)
+                        .rule(new CrossedUpIndicatorRule(closePrice, indicator))
+                        .build()
         );
     }
 }

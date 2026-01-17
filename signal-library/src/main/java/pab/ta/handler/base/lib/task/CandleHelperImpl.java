@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 public class CandleHelperImpl implements CandleHelper {
 
     @Override
-    public ZonedDateTime calculate(ZonedDateTime to, CandleInterval interval) {
+    public ZonedDateTime calculateFrom(ZonedDateTime to, CandleInterval interval) {
         return switch (interval) {
             case H1 -> to.minusWeeks(2);
             case H2 -> to.minusWeeks(4);
