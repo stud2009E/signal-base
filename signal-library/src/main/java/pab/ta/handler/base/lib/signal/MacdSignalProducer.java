@@ -31,8 +31,8 @@ public class MacdSignalProducer implements AssetDataProcessor {
                     var series = assetData.getBarSeries();
                     var closePrice = new ClosePriceIndicator(series);
 
-                    Indicator<Num> indicator = new MACDIndicator(closePrice);
-                    var index = indicator.getBarSeries().getEndIndex();
+                    var indicator = new MACDIndicator(closePrice).getHistogram(9);
+                    var index = series.getEndIndex();
 
                     signals(assetData.getTicker(), assetData.getInterval(), indicator)
                             .stream()
@@ -49,14 +49,14 @@ public class MacdSignalProducer implements AssetDataProcessor {
 
         return List.of(
                 Signal.builder()
-                        .name("MACD <> 0")
+                        .name("MACD hist <> 0")
                         .interval(interval)
                         .ticker(ticker)
                         .direction(BUY)
                         .rule(new CrossedUpIndicatorRule(indicator, 0))
                         .build(),
                 Signal.builder()
-                        .name("MACD >< 0")
+                        .name("MACD hist >< 0")
                         .interval(interval)
                         .ticker(ticker)
                         .direction(SELL)
