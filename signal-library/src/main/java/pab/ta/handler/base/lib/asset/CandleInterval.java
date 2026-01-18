@@ -4,5 +4,6 @@ public enum CandleInterval {
     H1,
     H2,
     H4,
-    DAY
+    DAY,
+    WEEK
 }
